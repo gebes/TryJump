@@ -38,7 +38,7 @@ public class Block implements Disposable {
         modelBuilder.node();
         MeshPartBuilder mesh_part_builder = modelBuilder.part("box", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position
                                                                                         | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates, material);
-        BoxShapeBuilder.build(mesh_part_builder, 5,5,5);
+        BoxShapeBuilder.build(mesh_part_builder, Variables.blockSize, Variables.blockSize, Variables.blockSize);
         model = modelBuilder.end();
 
         instance = new ModelInstance(model);
@@ -62,7 +62,7 @@ public class Block implements Disposable {
     }
 
     public enum Type {
-        Dirt, Stone;
+        Dirt, Stone, Bedrock;
 
         String getPath() {
             return "block/" + this.toString().toLowerCase() + ".png";

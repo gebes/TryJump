@@ -79,11 +79,6 @@ public class CameraController extends FirstPersonCameraController {
         Vector3 tmpDirection = new Vector3(direction);
         tmpDirection.nor();
         tmpDirection.scl(movement);
-        Vector3 p = tmpStart.cpy();
-        p.scl(1f / Variables.blockSize);
-        float playerX = p.x;
-        float playerY = p.y;
-        float playerZ = p.z;
 
         tmpStart.add(tmpDirection);
 
@@ -96,45 +91,43 @@ public class CameraController extends FirstPersonCameraController {
         int length = 9;
         int h = length / 2;
 
-        p.scl(1f / Variables.blockSize);
 
-        float width = 0f;
+        float width = 0.4f;
+        float extension = 0.01f;
 
-        float pa = 0.001f;
 
-        Vector3 playerA = new Vector3(playerX - width, playerY - 0.6f, playerZ - width);
-        Vector3 playerB = new Vector3(playerX + width, playerY + 0.3f, playerZ + width);
+        Vector3 player = getCameraWorldPosition();
+
+        Vector3 playerA = new Vector3(player.x - width, player.y - 1.2f, player.z - width);
+        Vector3 playerB = new Vector3(player.x + width, player.y + 0.4f, player.z + width);
+
 
         BoundingBox playerBoxX = new BoundingBox(
-                new Vector3(Float.MIN_VALUE, playerA.y - pa, playerA.z - pa),
-                new Vector3(Float.MAX_VALUE, playerB.y + pa, playerB.z + pa)
+                new Vector3(Float.MIN_VALUE, playerA.y - extension, playerA.z - extension),
+                new Vector3(Float.MAX_VALUE, playerB.y + extension, playerB.z + extension)
         );
 
         BoundingBox playerBoxY = new BoundingBox(
-                new Vector3(playerA.x - pa, Float.MIN_VALUE, playerA.z - pa),
-                new Vector3(playerB.x + pa, Float.MAX_VALUE, playerB.z + pa)
+                new Vector3(playerA.x - extension, Float.MIN_VALUE, playerA.z - extension),
+                new Vector3(playerB.x + extension, Float.MAX_VALUE, playerB.z + extension)
         );
 
         BoundingBox playerBoxZ = new BoundingBox(
-                new Vector3(playerA.x - pa, playerA.y - pa, Float.MIN_VALUE),
-                new Vector3(playerB.x + pa, playerB.y + pa, Float.MAX_VALUE)
+                new Vector3(playerA.x - extension, playerA.y - extension, Float.MIN_VALUE),
+                new Vector3(playerB.x + extension, playerB.y + extension, Float.MAX_VALUE)
         );
 
         float distanceX = Float.MAX_VALUE;
         float distanceY = Float.MAX_VALUE;
         float distanceZ = Float.MAX_VALUE;
 
-        grid.getBlock(1, 0, 0).setPosition(5f, 0, 0);
-        grid.getBlock(0, 0, 1).setPosition(0, 0, 5f);
-        grid.getBlock(1, 0, 1).setPosition(0, 5f, 0);
-
         List<BoundingBox> blocks = new LinkedList<>();
         for (int i = 0; i < length; i++) {
             for (int j = 0; j < length; j++) {
                 for (int k = 0; k < length; k++) {
-                    int x = (int) (playerX - h + i);
-                    int y = (int) (playerY - h + j);
-                    int z = (int) (playerZ - h + k);
+                    int x = (int) (player.x - h + i);
+                    int y = (int) (player.y - h + j);
+                    int z = (int) (player.z - h + k);
 
       /*  for (int x = 0; x < Variables.gridSize; x++) {
             for (int y = 0; y < Variables.gridSize; y++) {
@@ -166,8 +159,6 @@ public class CameraController extends FirstPersonCameraController {
                             float edgeBlock = cubeA.x;
                             float edgePlayer = playerB.x;
 
-                            grid.getBlock(0, 0, 18).setPosition(cubeA.x * 5f - 2.5f, cubeA.y * 5f - 2.5f, cubeA.z * 5f);
-                            grid.getBlock(0, 0, 19).setPosition((playerB.x + (width/2)) * 5f, (playerB.y - 2) * 5f, playerB.z * 5f);
 
                             if (edgeBlock >= edgePlayer) {
                                 float dis = edgeBlock - edgePlayer;
@@ -208,7 +199,7 @@ public class CameraController extends FirstPersonCameraController {
 
                     } else if (cubeBox.intersects(playerBoxZ)) {
                         if (translation.z < 0) {
-                            float edgeBlock = cubeB.z + 1;
+                            float edgeBlock = cubeB.z;
                             float edgePlayer = playerA.z;
 
                             if (edgeBlock <= edgePlayer) {
@@ -241,31 +232,31 @@ public class CameraController extends FirstPersonCameraController {
 
         if (translation.x >= 0) {
             if (translation.x > distanceX)
-                translation.x = distanceX - pa;
+                translation.x = distanceX - extension;
         } else {
             if (translation.x < -distanceX)
-                translation.x = -distanceX + pa;
+                translation.x = -distanceX + extension;
         }
 
         if (translation.y >= 0) {
             if (translation.y > distanceY)
-                translation.y = distanceY - pa;
+                translation.y = distanceY - extension;
         } else {
             if (translation.y < -distanceY)
-                translation.y = -distanceY + pa;
+                translation.y = -distanceY + extension;
         }
 
 
         if (translation.z >= 0) {
             if (translation.z > distanceZ)
-                translation.z = distanceZ - pa;
+                translation.z = distanceZ - extension;
         } else {
             if (translation.z < -distanceZ)
-                translation.z = -distanceZ + pa;
+                translation.z = -distanceZ + extension;
         }
 
-        Vector3 testA = new Vector3(playerX + translation.x - width, playerY + translation.y - 1f, playerZ + translation.z - width);
-        Vector3 testB = new Vector3(playerX + translation.x + width, playerY + translation.y + 1f, playerZ + translation.z + width);
+        Vector3 testA = playerA.cpy().add(translation);
+        Vector3 testB = playerB.cpy().add(translation);
         BoundingBox testBox = new BoundingBox(
                 testA,
                 testB
@@ -278,9 +269,16 @@ public class CameraController extends FirstPersonCameraController {
             }
         }
 
-        p.scl(Variables.blockSize);
+        player.scl(Variables.blockSize);
 
         return translation;
+    }
+
+    public Vector3 getCameraWorldPosition() {
+        Vector3 p = camera.position.cpy();
+        p.scl(1f / Variables.blockSize);
+        p.add(0.5f, 0, 0.5f);
+        return p;
     }
 
 

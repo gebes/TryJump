@@ -27,11 +27,11 @@ public class Grid implements Disposable {
             for (int y = 0; y < blocks[x].length; y++) {
                 for (int z = 0; z < blocks[x][y].length; z++) {
                     if (y == 0)
-                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);
-               /*     if (y == 1)
+                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Bedrock);
+                    if (y == 1 || y == 2)
                         blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Stone);
-                    if (y == 2)
-                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);*/
+                    if (y == 3 || y == 4 || y == 5)
+                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);
                 }
             }
         }
@@ -151,7 +151,6 @@ public class Grid implements Disposable {
             lastPointZ = z;
         }
     }
-
 
 
 }
