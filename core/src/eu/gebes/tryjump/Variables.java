@@ -10,7 +10,7 @@ public class Variables {
 
     public static final float crosshairSize = 100;
 
-    public static final int gridSize = 50;
+    public static int gridWidth = 50, gridHeight = 20, gridDepth = 50;
     public static final int blockSize = 5;
 
 }

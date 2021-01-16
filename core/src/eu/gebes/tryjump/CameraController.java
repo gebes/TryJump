@@ -70,6 +70,22 @@ public class CameraController extends FirstPersonCameraController {
         camera.position.add(
                 moveByRaycast(camera.position, new Vector3(0, -1, 0), dt * Variables.blockSize * 5)
         );
+
+        if (camera.position.x < 0)
+            camera.position.x = 0;
+        if (camera.position.y < Variables.blockSize)
+            camera.position.y = Variables.blockSize;
+        if (camera.position.z < 0)
+            camera.position.z = 0;
+
+        if (camera.position.x > Variables.gridWidth * Variables.blockSize)
+            camera.position.x = Variables.gridWidth * Variables.blockSize;
+        if (camera.position.y > Variables.gridHeight * Variables.blockSize - Variables.blockSize)
+            camera.position.y = Variables.gridHeight * Variables.blockSize - Variables.blockSize;
+        if (camera.position.z > Variables.gridDepth * Variables.blockSize)
+            camera.position.z = Variables.gridDepth * Variables.blockSize;
+
+
         super.update();
     }
 
@@ -103,8 +119,8 @@ public class CameraController extends FirstPersonCameraController {
 
 
         BoundingBox playerBoxX = new BoundingBox(
-                new Vector3(Float.MIN_VALUE, playerA.y - extension, playerA.z - extension),
-                new Vector3(Float.MAX_VALUE, playerB.y + extension, playerB.z + extension)
+                new Vector3(Float.MIN_VALUE, playerA.y, playerA.z - extension),
+                new Vector3(Float.MAX_VALUE, playerB.y, playerB.z + extension)
         );
 
         BoundingBox playerBoxY = new BoundingBox(
@@ -113,8 +129,8 @@ public class CameraController extends FirstPersonCameraController {
         );
 
         BoundingBox playerBoxZ = new BoundingBox(
-                new Vector3(playerA.x - extension, playerA.y - extension, Float.MIN_VALUE),
-                new Vector3(playerB.x + extension, playerB.y + extension, Float.MAX_VALUE)
+                new Vector3(playerA.x - extension, playerA.y, Float.MIN_VALUE),
+                new Vector3(playerB.x + extension, playerB.y, Float.MAX_VALUE)
         );
 
         float distanceX = Float.MAX_VALUE;

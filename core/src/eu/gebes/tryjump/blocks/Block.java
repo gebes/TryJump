@@ -33,6 +33,7 @@ public class Block implements Disposable {
 
     public Block(Texture texture, Type type) {
         this.type = type;
+
         material = new Material(TextureAttribute.createDiffuse(texture));
         modelBuilder.begin();
         modelBuilder.node();

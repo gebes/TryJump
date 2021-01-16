@@ -21,17 +21,20 @@ public class Grid implements Disposable {
 
     public Grid() {
         blockManager = new BlockManager();
-        blocks = new Block[Variables.gridSize][Variables.gridSize][Variables.gridSize];
+        blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
 
         for (int x = 0; x < blocks.length; x++) {
             for (int y = 0; y < blocks[x].length; y++) {
                 for (int z = 0; z < blocks[x][y].length; z++) {
-                    if (y == 0)
+               /*     if (y == 0)
                         blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Bedrock);
                     if (y == 1 || y == 2)
                         blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Stone);
-                    if (y == 3 || y == 4 || y == 5)
-                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);
+                    if (y == 3 || y == 4)
+                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);*/
+
+                    if (y == 0 || z == 0 || x == 0)
+                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Bedrock);
                 }
             }
         }
@@ -39,9 +42,9 @@ public class Grid implements Disposable {
     }
 
     public void updatePosition() {
-        for (int i = 0; i < Variables.gridSize; i++) {
-            for (int j = 0; j < Variables.gridSize; j++) {
-                for (int k = 0; k < Variables.gridSize; k++) {
+        for (int i = 0; i < Variables.gridWidth; i++) {
+            for (int j = 0; j < Variables.gridHeight; j++) {
+                for (int k = 0; k < Variables.gridDepth; k++) {
                     float x = i * Variables.blockSize;
                     float y = j * Variables.blockSize;
                     float z = k * Variables.blockSize;
@@ -116,7 +119,7 @@ public class Grid implements Disposable {
         int lastPointY = 0;
         int lastPointZ = 0;
 
-        for (int i = 1; i < Variables.gridSize * 2; i++) {
+        for (int i = 1; i < Math.max(Math.max(Variables.gridWidth, Variables.gridHeight), Variables.gridDepth) * 2; i++) {
             Vector3 tmpStart = new Vector3(startPoint);
             Vector3 tmpDirection = new Vector3(direction);
             tmpDirection.nor();
@@ -128,7 +131,7 @@ public class Grid implements Disposable {
             int y = Math.round(line.y);
             int z = Math.round(line.z);
 
-            if (x > (Variables.gridSize - 1) || y > (Variables.gridSize - 1) || z > (Variables.gridSize - 1) || x < 0 || y < 0 || z < 0) {
+            if (x > (Variables.gridWidth - 1) || y > (Variables.gridHeight - 1) || z > (Variables.gridDepth - 1) || x < 0 || y < 0 || z < 0) {
                 break;
             }
 
