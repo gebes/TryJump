@@ -28,10 +28,10 @@ public class Grid implements Disposable {
                 for (int z = 0; z < blocks[x][y].length; z++) {
                     if (y == 0)
                         blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);
-                    if (y == 1)
+               /*     if (y == 1)
                         blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Stone);
                     if (y == 2)
-                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);
+                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);*/
                 }
             }
         }

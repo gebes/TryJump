@@ -98,16 +98,12 @@ public class CameraController extends FirstPersonCameraController {
 
         p.scl(1f / Variables.blockSize);
 
-        float width = 0.2f;
+        float width = 0f;
 
         float pa = 0.001f;
 
-        Vector3 playerA = new Vector3(playerX - width, playerY - 1f, playerZ - width);
-        Vector3 playerB = new Vector3(playerX + width, playerY + 1f, playerZ + width);
-        BoundingBox playerBox = new BoundingBox(
-                playerA,
-                playerB
-        );
+        Vector3 playerA = new Vector3(playerX - width, playerY - 0.6f, playerZ - width);
+        Vector3 playerB = new Vector3(playerX + width, playerY + 0.3f, playerZ + width);
 
         BoundingBox playerBoxX = new BoundingBox(
                 new Vector3(Float.MIN_VALUE, playerA.y - pa, playerA.z - pa),
@@ -127,6 +123,10 @@ public class CameraController extends FirstPersonCameraController {
         float distanceX = Float.MAX_VALUE;
         float distanceY = Float.MAX_VALUE;
         float distanceZ = Float.MAX_VALUE;
+
+        grid.getBlock(1, 0, 0).setPosition(5f, 0, 0);
+        grid.getBlock(0, 0, 1).setPosition(0, 0, 5f);
+        grid.getBlock(1, 0, 1).setPosition(0, 5f, 0);
 
         List<BoundingBox> blocks = new LinkedList<>();
         for (int i = 0; i < length; i++) {
@@ -164,8 +164,10 @@ public class CameraController extends FirstPersonCameraController {
 
 
                             float edgeBlock = cubeA.x;
-                            float edgePlayer = playerB.x + 1;
+                            float edgePlayer = playerB.x;
 
+                            grid.getBlock(0, 0, 18).setPosition(cubeA.x * 5f - 2.5f, cubeA.y * 5f - 2.5f, cubeA.z * 5f);
+                            grid.getBlock(0, 0, 19).setPosition((playerB.x + (width/2)) * 5f, (playerB.y - 2) * 5f, playerB.z * 5f);
 
                             if (edgeBlock >= edgePlayer) {
                                 float dis = edgeBlock - edgePlayer;
@@ -206,7 +208,7 @@ public class CameraController extends FirstPersonCameraController {
 
                     } else if (cubeBox.intersects(playerBoxZ)) {
                         if (translation.z < 0) {
-                            float edgeBlock = cubeB.z;
+                            float edgeBlock = cubeB.z + 1;
                             float edgePlayer = playerA.z;
 
                             if (edgeBlock <= edgePlayer) {
@@ -219,7 +221,7 @@ public class CameraController extends FirstPersonCameraController {
                         } else {
 
                             float edgeBlock = cubeA.z;
-                            float edgePlayer = playerB.z + 1;
+                            float edgePlayer = playerB.z;
 
 
                             if (edgeBlock >= edgePlayer) {

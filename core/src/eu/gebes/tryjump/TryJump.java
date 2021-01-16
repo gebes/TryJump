@@ -38,7 +38,10 @@ public class TryJump extends ApplicationAdapter {
         modelBatch = new ModelBatch();
 
         camera = new PerspectiveCamera(Variables.FOV, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(Variables.gridSize/2f*Variables.blockSize, 5*Variables.blockSize, Variables.gridSize/2f*Variables.blockSize);
+      //  camera.position.set(Variables.gridSize/2f*Variables.blockSize, 5*Variables.blockSize, Variables.gridSize/2f*Variables.blockSize);
+
+        camera.position.set(1f*Variables.blockSize, 5*Variables.blockSize, 1f*Variables.blockSize);
+
         camera.near = Variables.cameraNear;
         camera.far = Variables.cameraFar;
         cameraController = new CameraController(camera, grid);
