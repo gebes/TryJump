@@ -58,12 +58,11 @@ public class Grid implements Disposable {
     }
 
 
-    public void renderGrid(ModelBatch batch, Environment environment) {
+    public void renderGrid(ModelBatch batch, Environment environment, CameraController cameraController) {
         for (int x = 0; x < blocks.length; x++) {
             for (int y = 0; y < blocks[x].length; y++) {
                 for (int z = 0; z < blocks[x][y].length; z++) {
-
-                    if (hasBlock(x, y, z) && isVisible(x, y, z))
+                    if (hasBlock(x, y, z) && isVisible(x, y, z) && cameraController.getCameraWorldPosition().dst(getBlock(x, y, z).getPosition().scl(1f / Variables.blockSize)) < (25))
                         batch.render(blocks[x][y][z].getInstance(), environment);
                 }
             }

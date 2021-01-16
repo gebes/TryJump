@@ -78,12 +78,12 @@ public class CameraController extends FirstPersonCameraController {
         if (camera.position.z < 0)
             camera.position.z = 0;
 
-        if (camera.position.x > Variables.gridWidth * Variables.blockSize)
-            camera.position.x = Variables.gridWidth * Variables.blockSize;
+        if (camera.position.x > Variables.gridWidth * Variables.blockSize - Variables.blockSize)
+            camera.position.x = Variables.gridWidth * Variables.blockSize - Variables.blockSize;
         if (camera.position.y > Variables.gridHeight * Variables.blockSize - Variables.blockSize)
             camera.position.y = Variables.gridHeight * Variables.blockSize - Variables.blockSize;
-        if (camera.position.z > Variables.gridDepth * Variables.blockSize)
-            camera.position.z = Variables.gridDepth * Variables.blockSize;
+        if (camera.position.z > Variables.gridDepth * Variables.blockSize - Variables.blockSize)
+            camera.position.z = Variables.gridDepth * Variables.blockSize - Variables.blockSize;
 
 
         super.update();
@@ -297,7 +297,11 @@ public class CameraController extends FirstPersonCameraController {
         return p;
     }
 
-
+    public Vector3 getCameraPosition() {
+        Vector3 p = camera.position.cpy();
+        p.add(Variables.blockSize, 0, Variables.blockSize);
+        return p;
+    }
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         touchDragged(screenX, screenY, 0);

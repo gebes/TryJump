@@ -63,7 +63,7 @@ public class TryJump extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
         modelBatch.begin(camera);
-        grid.renderGrid(modelBatch, environment);
+        grid.renderGrid(modelBatch, environment, cameraController);
         modelBatch.end();
 
         spriteBatch.begin();
