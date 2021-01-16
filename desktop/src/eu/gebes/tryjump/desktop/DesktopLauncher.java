@@ -21,13 +21,14 @@ public class DesktopLauncher extends JFrame {
 
     private static void initComponents() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(300,200);
+        frame.setSize(330,300);
         JPanel  panel = guiClass.main();
         JButton startButton = guiClass.startButton();
-        startButton.setSize(300,50);
+        final JComboBox  resoltion = guiClass.resolution();
 
 
         panel.add(startButton);
+        panel.add(resoltion);
         frame.getContentPane().add(panel);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,8 +36,14 @@ public class DesktopLauncher extends JFrame {
 
         startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
-                System.out.println("asd");
-                start.startGame();
+                String res = String.valueOf(resoltion.getSelectedItem());
+
+                if(res.equals("HD")){
+                    start.startGame(1280,720);
+                }else{
+                    start.startGame(1920,1080);
+                }
+
                 frame.dispose();
             }
 

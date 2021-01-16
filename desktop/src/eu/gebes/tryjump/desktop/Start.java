@@ -12,7 +12,7 @@ public class Start {
         this.arg = arg;
     }
 
-    public void startGame(){
+    public void startGame(int width, int height){
         if (arg.length > 0) {
             Variables.gridWidth = Integer.parseInt(arg[0]);
         }
@@ -24,8 +24,8 @@ public class Start {
         }
 
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.width = 1920;
-        config.height = 1080;
+        config.width = width;
+        config.height = height;
         config.foregroundFPS = 0;
 
         new LwjglApplication(new TryJump(), config);

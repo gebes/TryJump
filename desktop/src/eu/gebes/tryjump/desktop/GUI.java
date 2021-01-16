@@ -27,4 +27,13 @@ public class GUI {
         return button;
     }
 
+    public JComboBox resolution(){
+        String comboBoxListe[] = {"FULL-HD", "HD"};
+
+
+        JComboBox res = new JComboBox(comboBoxListe);
+        res.setPreferredSize(new Dimension(300, 70));
+        return  res;
+    }
+
 }
