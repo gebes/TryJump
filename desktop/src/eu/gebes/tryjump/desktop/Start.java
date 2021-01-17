@@ -8,11 +8,11 @@ import eu.gebes.tryjump.Variables;
 public class Start {
     private String[] arg;
 
-    public Start(String[] arg){
+    public Start(String[] arg) {
         this.arg = arg;
     }
 
-    public void startGame(int width, int height){
+    public void startGame(int width, int height, int fov) {
         if (arg.length > 0) {
             Variables.gridWidth = Integer.parseInt(arg[0]);
         }
@@ -27,6 +27,7 @@ public class Start {
         config.width = width;
         config.height = height;
         config.foregroundFPS = 0;
+        Variables.FOV = fov;
 
         new LwjglApplication(new TryJump(), config);
     }

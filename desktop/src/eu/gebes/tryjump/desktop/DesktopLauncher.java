@@ -25,10 +25,12 @@ public class DesktopLauncher extends JFrame {
         JPanel  panel = guiClass.main();
         JButton startButton = guiClass.startButton();
         final JComboBox  resoltion = guiClass.resolution();
-
+        final TextField textField = new TextField("67");
 
         panel.add(startButton);
         panel.add(resoltion);
+        panel.add(new Label("FOV"));
+        panel.add(textField);
         frame.getContentPane().add(panel);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -38,11 +40,14 @@ public class DesktopLauncher extends JFrame {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 String res = String.valueOf(resoltion.getSelectedItem());
 
-                if(res.equals("HD")){
-                    start.startGame(1280,720);
-                }else{
-                    start.startGame(1920,1080);
-                }
+                String[] split = res.split("x");
+                int width = Integer.parseInt(split[0]);
+                int height = Integer.parseInt(split[1]);
+
+                int fov = Integer.parseInt(textField.getText());
+
+
+                start.startGame(width, height, fov);
 
                 frame.dispose();
             }

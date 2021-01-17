@@ -28,7 +28,7 @@ public class GUI {
     }
 
     public JComboBox resolution(){
-        String comboBoxListe[] = {"FULL-HD", "HD"};
+        String[] comboBoxListe = {"2560x1440", "1920x1080", "1280x720"};
 
 
         JComboBox res = new JComboBox(comboBoxListe);
