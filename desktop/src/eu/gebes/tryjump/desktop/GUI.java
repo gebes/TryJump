@@ -4,36 +4,55 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GUI {
-    private JButton button = new JButton("START");
+    private static StartApplication startApplication;
+    private static StartGUI startGuiClass = new StartGUI();
+    private static Settings settingsClass  = new Settings();
+    private static JFrame frame = new JFrame();
 
-    public JPanel main(){
-        JPanel panel = new JPanel();
-        panel.setSize(300,500);
+    public void initComponents(String[] arg) {
+        startApplication = new StartApplication(arg);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(330,300);
+        final JPanel  panel = startGuiClass.main();
+        JButton startButton = startGuiClass.settingsButton();
+        JButton settingsButton = startGuiClass.startButton();
+        final JPanel settings = settingsClass.panel();
+        JButton backButton = settingsClass.backButton();
 
-        JLabel header = new JLabel("START GAME");
-        header.setFont(new java.awt.Font("Tahoma", 1, 28));
-        header.setPreferredSize(new Dimension(300, 70));
-        header.setHorizontalAlignment(SwingConstants.CENTER);
-        header.setVerticalAlignment(SwingConstants.TOP);
+        panel.add(startButton);
+        panel.add(settingsButton);
+        frame.getContentPane().add(panel);
+        frame.setVisible(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        centreWindow(frame);
 
-        panel.add(header, BorderLayout.NORTH);
-        return panel;
+        startButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                startApplication.startGame(settingsClass.getWidth(), settingsClass.getHeight(), settingsClass.getFov());
+                frame.dispose();
+            }
+
+        });
+        settingsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                frame.setContentPane(settings);
+                frame.setSize(330,500);
+            }
+
+        });
+        backButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+                frame.setContentPane(panel);
+                frame.setSize(330,300);
+            }
+
+        });
     }
 
-    public JButton startButton(){
-        button.setSize(300,100);
-        button.setPreferredSize(new Dimension(300, 70));
-
-        return button;
+    public static void centreWindow(Window frame) {
+        Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
+        int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
+        frame.setLocation(x, y);
     }
-
-    public JComboBox resolution(){
-        String[] comboBoxListe = {"2560x1440", "1920x1080", "1280x720"};
-
-
-        JComboBox res = new JComboBox(comboBoxListe);
-        res.setPreferredSize(new Dimension(300, 70));
-        return  res;
-    }
-
 }

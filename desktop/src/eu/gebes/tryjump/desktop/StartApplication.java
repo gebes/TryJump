@@ -5,10 +5,10 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import eu.gebes.tryjump.TryJump;
 import eu.gebes.tryjump.Variables;
 
-public class Start {
+public class StartApplication {
     private String[] arg;
 
-    public Start(String[] arg) {
+    public StartApplication(String[] arg) {
         this.arg = arg;
     }
 
