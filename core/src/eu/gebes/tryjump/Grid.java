@@ -118,7 +118,7 @@ public class Grid implements Disposable {
         int lastPointY = 0;
         int lastPointZ = 0;
 
-        for (int i = 1; i < Math.max(Math.max(Variables.gridWidth, Variables.gridHeight), Variables.gridDepth) * 2; i++) {
+        for (int i = 1; i < Variables.blockSize*10; i++) {
             Vector3 tmpStart = new Vector3(startPoint);
             Vector3 tmpDirection = new Vector3(direction);
             tmpDirection.nor();
