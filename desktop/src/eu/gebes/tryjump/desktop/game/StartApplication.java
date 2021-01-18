@@ -1,4 +1,4 @@
-package eu.gebes.tryjump.desktop;
+package eu.gebes.tryjump.desktop.game;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -12,7 +12,7 @@ public class StartApplication {
         this.arg = arg;
     }
 
-    public void startGame(int width, int height, int fov) {
+    public void startGame(int width, int height, int fov, boolean fullscreen, int musicVolume) {
         if (arg.length > 0) {
             Variables.gridWidth = Integer.parseInt(arg[0]);
         }
@@ -27,7 +27,9 @@ public class StartApplication {
         config.width = width;
         config.height = height;
         config.foregroundFPS = 0;
+        config.fullscreen = fullscreen;
         Variables.FOV = fov;
+        Variables.musicVolume = musicVolume;
 
         new LwjglApplication(new TryJump(), config);
     }

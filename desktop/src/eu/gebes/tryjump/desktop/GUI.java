@@ -1,13 +1,18 @@
 package eu.gebes.tryjump.desktop;
 
+import eu.gebes.tryjump.desktop.game.StartApplication;
+import eu.gebes.tryjump.desktop.settings.SettingsPane;
+import eu.gebes.tryjump.desktop.settings.SettingsSave;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class GUI {
     private static StartApplication startApplication;
     private static StartGUI startGuiClass = new StartGUI();
-    private static Settings settingsClass  = new Settings();
     private static JFrame frame = new JFrame();
+    private static SettingsSave save = new SettingsSave();
+    private static SettingsPane settingsPaneClass = new SettingsPane();
 
     public void initComponents(String[] arg) {
         startApplication = new StartApplication(arg);
@@ -16,8 +21,8 @@ public class GUI {
         final JPanel  panel = startGuiClass.main();
         JButton startButton = startGuiClass.settingsButton();
         JButton settingsButton = startGuiClass.startButton();
-        final JPanel settings = settingsClass.panel();
-        JButton backButton = settingsClass.backButton();
+        final JPanel settings = settingsPaneClass.panel();
+        JButton backButton = settingsPaneClass.backButton();
 
         panel.add(startButton);
         panel.add(settingsButton);
@@ -28,7 +33,8 @@ public class GUI {
 
         startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
-                startApplication.startGame(settingsClass.getWidth(), settingsClass.getHeight(), settingsClass.getFov());
+                startApplication.startGame(settingsPaneClass.getWidth(), settingsPaneClass.getHeight(), settingsPaneClass.getFov(), settingsPaneClass.isFullscreenBool(), settingsPaneClass.getVolume());
+                save.save(new String[]{String.valueOf(settingsPaneClass.getWidth()), String.valueOf(settingsPaneClass.getHeight()),String.valueOf(settingsPaneClass.getFov()),String.valueOf(settingsPaneClass.getVolume()), String.valueOf(settingsPaneClass.isFullscreenBool())});
                 frame.dispose();
             }
 
@@ -36,7 +42,7 @@ public class GUI {
         settingsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 frame.setContentPane(settings);
-                frame.setSize(330,500);
+                frame.setSize(330,450);
             }
 
         });

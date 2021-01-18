@@ -2,6 +2,7 @@ package eu.gebes.tryjump;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,7 +11,6 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import eu.gebes.tryjump.blocks.BlockManager;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
@@ -27,6 +27,7 @@ public class TryJump extends ApplicationAdapter {
 
     @Override
     public void create() {
+        music();
         grid = new Grid();
 
         environment = new Environment();
@@ -71,6 +72,12 @@ public class TryJump extends ApplicationAdapter {
         spriteBatch.end();
 
 
+    }
+    public void music(){
+        if(Variables.musicVolume!=0) {
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/music.wav"));
+            sound.setLooping(sound.play(Variables.musicVolume), true);
+        }
     }
 
     @Override

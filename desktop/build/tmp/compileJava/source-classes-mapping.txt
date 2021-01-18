@@ -1,10 +1,16 @@
-eu/gebes/tryjump/desktop/StartApplication.java
- eu.gebes.tryjump.desktop.StartApplication
+eu/gebes/tryjump/desktop/game/StartApplication.java
+ eu.gebes.tryjump.desktop.game.StartApplication
+eu/gebes/tryjump/desktop/settings/SettingsNodes.java
+ eu.gebes.tryjump.desktop.settings.SettingsNodes
 eu/gebes/tryjump/desktop/StartGUI.java
  eu.gebes.tryjump.desktop.StartGUI
-eu/gebes/tryjump/desktop/Settings.java
- eu.gebes.tryjump.desktop.Settings
- eu.gebes.tryjump.desktop.Settings$1
+eu/gebes/tryjump/desktop/settings/SettingsSave.java
+ eu.gebes.tryjump.desktop.settings.SettingsSave
+eu/gebes/tryjump/desktop/settings/SettingsPane.java
+ eu.gebes.tryjump.desktop.settings.SettingsPane
+ eu.gebes.tryjump.desktop.settings.SettingsPane$1
+ eu.gebes.tryjump.desktop.settings.SettingsPane$2
+ eu.gebes.tryjump.desktop.settings.SettingsPane$3
 eu/gebes/tryjump/desktop/GUI.java
  eu.gebes.tryjump.desktop.GUI
  eu.gebes.tryjump.desktop.GUI$1
