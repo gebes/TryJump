@@ -32,7 +32,7 @@ public class Grid implements Disposable {
                     Vector3 block = new Vector3(x,y,z);
 
                     float dst = block.dst2(center);
-                    if(dst < (radius * radius) && dst > innerRadius * innerRadius &&)
+                    if(dst < (radius * radius) && dst > innerRadius * innerRadius)
                         blocks[x][y][z]= blockManager.getBlockFor(Block.Type.Dirt);
 
                 }
