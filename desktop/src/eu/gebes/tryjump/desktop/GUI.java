@@ -34,7 +34,6 @@ public class GUI {
         startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 startApplication.startGame(settingsPaneClass.getWidth(), settingsPaneClass.getHeight(), settingsPaneClass.getFov(), settingsPaneClass.isFullscreenBool(), settingsPaneClass.getVolume());
-                save.save(new String[]{String.valueOf(settingsPaneClass.getWidth()), String.valueOf(settingsPaneClass.getHeight()),String.valueOf(settingsPaneClass.getFov()),String.valueOf(settingsPaneClass.getVolume()), String.valueOf(settingsPaneClass.isFullscreenBool())});
                 frame.dispose();
             }
 

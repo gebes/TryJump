@@ -57,6 +57,8 @@ public class SettingsPane {
                 height = Integer.parseInt(split[1]);
                 fov = FOV.getValue();
                 volume = musicVolume.getValue();
+                save.save(new String[]{String.valueOf(width), String.valueOf(height),String.valueOf(fov),String.valueOf(volume), String.valueOf(fullscreenBool)});
+
             }
 
         });
