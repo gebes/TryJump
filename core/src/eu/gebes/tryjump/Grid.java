@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import eu.gebes.tryjump.blocks.Block;
 import eu.gebes.tryjump.blocks.BlockManager;
+import eu.gebes.tryjump.map.LoadMap;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -16,15 +17,16 @@ import lombok.experimental.FieldDefaults;
 public class Grid implements Disposable {
 
     BlockManager blockManager;
+    private LoadMap loadMap= new LoadMap();
 
-    Block blocks[][][];
+    public static Block[][][] blocks;
 
     public Grid() {
         blockManager = new BlockManager();
-        blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
-        //blocks = new Block[500][50][51];
+        blocks = loadMap.loadMap();
 
-        Vector3 center = new Vector3(Variables.gridWidth/2f, Variables.gridHeight/2f, Variables.gridDepth/2f);
+
+        /*Vector3 center = new Vector3(Variables.gridWidth/2f, Variables.gridHeight/2f, Variables.gridDepth/2f);
         int radius = 20;
         int innerRadius = 1;
         for (int x = 0; x < blocks.length; x++) {
@@ -38,7 +40,7 @@ public class Grid implements Disposable {
 
                 }
             }
-        }
+        }*/
         updatePosition();
     }
 
@@ -142,7 +144,7 @@ public class Grid implements Disposable {
                         blocks[x][y][z] = null;
                         updatePosition();
                     }
-                } else if (type == Block.Type.Planks) {
+                } else if (type == type) {
                     blocks[lastPointX][lastPointY][lastPointZ] = blockManager.getBlockFor(type);
                     updatePosition();
                 }

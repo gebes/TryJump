@@ -11,6 +11,7 @@ public class BlockManager implements Disposable {
 
     Map<Block.Type, Texture> textures = new HashMap<>();
 
+
     public BlockManager(){
         for (Block.Type value : Block.Type.values()) {
             textures.put(value, new Texture(Gdx.files.internal(value.getPath())));

@@ -63,12 +63,26 @@ public class Block implements Disposable {
     }
 
     public enum Type {
-        Dirt, Stone, Bedrock, Planks, Log;
+
+
+        Dirt(0), Stone(1), Planks(2), Log(3), Leaves(4), Bedrock(5);
+
+        private Integer id;
+
+        Type(Integer value) {
+            this.id = value;
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
 
         String getPath() {
             return "block/" + this.toString().toLowerCase() + ".png";
         }
 
     }
+
 
 }

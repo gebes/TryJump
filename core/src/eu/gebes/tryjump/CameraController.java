@@ -4,13 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import eu.gebes.tryjump.blocks.Block;
+import eu.gebes.tryjump.map.SaveMap;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
 import java.util.LinkedList;
@@ -19,6 +17,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CameraController extends FirstPersonCameraController {
 
+    Block.Type selectedBlock = Block.Type.Stone;
     final Camera camera;
     final Grid grid;
 
@@ -33,7 +32,7 @@ public class CameraController extends FirstPersonCameraController {
         if (button == 0) {
             grid.editBoxByRayCast(camera.position, camera.direction, null);
         } else if (button == 1) {
-            grid.editBoxByRayCast(camera.position, camera.direction, Block.Type.Planks);
+            grid.editBoxByRayCast(camera.position, camera.direction, selectedBlock);
         }
         return super.touchDown(screenX, screenY, pointer, button);
     }
@@ -312,6 +311,19 @@ public class CameraController extends FirstPersonCameraController {
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE) {
             Gdx.app.exit();
+            new SaveMap().getMap(Grid.blocks);
+        }if(keycode == Input.Keys.NUM_1){
+            selectedBlock = Block.Type.Dirt;
+        }if(keycode == Input.Keys.NUM_2){
+            selectedBlock = Block.Type.Stone;
+        }if(keycode == Input.Keys.NUM_3){
+            selectedBlock = Block.Type.Log;
+        }if(keycode == Input.Keys.NUM_4){
+            selectedBlock = Block.Type.Planks;
+        }if(keycode == Input.Keys.NUM_5){
+            selectedBlock = Block.Type.Leaves;
+        }if(keycode == Input.Keys.NUM_0){
+            selectedBlock = Block.Type.Bedrock;
         }
         return false;
     }
