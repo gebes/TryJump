@@ -33,7 +33,7 @@ public class CameraController extends FirstPersonCameraController {
         if (button == 0) {
             grid.editBoxByRayCast(camera.position, camera.direction, null);
         } else if (button == 1) {
-            grid.editBoxByRayCast(camera.position, camera.direction, Block.Type.Dirt);
+            grid.editBoxByRayCast(camera.position, camera.direction, Block.Type.Planks);
         }
         return super.touchDown(screenX, screenY, pointer, button);
     }

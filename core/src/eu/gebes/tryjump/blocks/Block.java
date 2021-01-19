@@ -63,7 +63,7 @@ public class Block implements Disposable {
     }
 
     public enum Type {
-        Dirt, Stone, Bedrock;
+        Dirt, Stone, Bedrock, Planks, Log;
 
         String getPath() {
             return "block/" + this.toString().toLowerCase() + ".png";

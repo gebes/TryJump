@@ -22,10 +22,11 @@ public class Grid implements Disposable {
     public Grid() {
         blockManager = new BlockManager();
         blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
+        //blocks = new Block[500][50][51];
 
         Vector3 center = new Vector3(Variables.gridWidth/2f, Variables.gridHeight/2f, Variables.gridDepth/2f);
         int radius = 20;
-        int innerRadius = 15;
+        int innerRadius = 1;
         for (int x = 0; x < blocks.length; x++) {
             for (int y = 0; y < blocks[x].length; y++) {
                 for (int z = 0; z < blocks[x][y].length; z++) {
@@ -33,7 +34,7 @@ public class Grid implements Disposable {
 
                     float dst = block.dst2(center);
                     if(dst < (radius * radius) && dst > innerRadius * innerRadius)
-                        blocks[x][y][z]= blockManager.getBlockFor(Block.Type.Dirt);
+                        blocks[x][y][z]= blockManager.getBlockFor(Block.Type.Log);
 
                 }
             }
@@ -141,7 +142,7 @@ public class Grid implements Disposable {
                         blocks[x][y][z] = null;
                         updatePosition();
                     }
-                } else if (type == Block.Type.Dirt) {
+                } else if (type == Block.Type.Planks) {
                     blocks[lastPointX][lastPointY][lastPointZ] = blockManager.getBlockFor(type);
                     updatePosition();
                 }

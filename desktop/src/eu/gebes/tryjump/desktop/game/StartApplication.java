@@ -26,7 +26,7 @@ public class StartApplication {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.width = width;
         config.height = height;
-        config.foregroundFPS = 0;
+        config.foregroundFPS = 144;
         config.fullscreen = fullscreen;
         Variables.FOV = fov;
         Variables.musicVolume = musicVolume;

@@ -1,8 +1,9 @@
 package eu.gebes.tryjump;
 
+
 public class Variables {
 
-    public static float FOV = 67;
+    public static float FOV = 70;
     public static final float cameraNear = 1;
     public static final float cameraFar = 300;
     public static final float cameraVelocity = 15;
