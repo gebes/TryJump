@@ -37,50 +37,67 @@ public class CameraController extends FirstPersonCameraController {
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
+    Vector3 velocity = Vector3.Zero;
+    float gravity = 9.81f;
+    float movementSpeed = 16f;
 
     @Override
     public void update() {
         float dt = Gdx.graphics.getDeltaTime();
+
+        velocity.scl(0.1f * dt, 1, 0.1f * dt);
+
+
+        Vector3 camDir = camera.direction.cpy();
+        camDir.y = 0;
+        camDir.nor();
+
+        Vector3 camRight = new Vector3(camDir.z, 0f, -camDir.x);
+
+        float val = movementSpeed * dt;
+
+        Vector3 newVel = new Vector3(velocity);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            Vector3 vector = camera.direction.cpy();
-            vector.y = 0;
-            camera.position.add(
-                    moveByRaycast(camera.position, vector, dt * Variables.blockSize * 5)
-            );
+            newVel.add(camDir.scl(val));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            Vector3 vector = camera.direction.cpy();
-            vector.y = 0;
-            camera.position.add(
-                    moveByRaycast(camera.position, vector, dt * Variables.blockSize * -5)
-            );
+            newVel.sub(camDir.scl(val));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            camera.position.add(
-                    moveByRaycast(camera.position, new Vector3(0, 2, 0), dt * Variables.blockSize * 5)
-            );
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            newVel.add(camRight.scl(val));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-            camera.position.add(
-                    moveByRaycast(camera.position, new Vector3(0, -1, 0), dt * Variables.blockSize * 5)
-            );
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            newVel.sub(camRight.scl(val));
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && (velocity.y >= 0 && velocity.y < 1)) {
+            newVel.y = 2;
+        }
+        System.out.println(velocity);
 
+        newVel.sub(0, gravity * dt/2, 0);
+
+        velocity = newVel;
+
+        Vector3 t = moveBy(velocity);
         camera.position.add(
-                moveByRaycast(camera.position, new Vector3(0, -1, 0), dt * Variables.blockSize * 5)
+                t
         );
 
         if (camera.position.x < 0)
             camera.position.x = 0;
-        if (camera.position.y < Variables.blockSize)
+        if (camera.position.y < Variables.blockSize) {
             camera.position.y = Variables.blockSize;
+            velocity.y = 0;
+        }
         if (camera.position.z < 0)
             camera.position.z = 0;
 
         if (camera.position.x > Variables.gridWidth * Variables.blockSize - Variables.blockSize)
             camera.position.x = Variables.gridWidth * Variables.blockSize - Variables.blockSize;
-        if (camera.position.y > Variables.gridHeight * Variables.blockSize - Variables.blockSize)
+        if (camera.position.y > Variables.gridHeight * Variables.blockSize - Variables.blockSize) {
             camera.position.y = Variables.gridHeight * Variables.blockSize - Variables.blockSize;
+            velocity.y = 0;
+        }
         if (camera.position.z > Variables.gridDepth * Variables.blockSize - Variables.blockSize)
             camera.position.z = Variables.gridDepth * Variables.blockSize - Variables.blockSize;
 
@@ -88,24 +105,10 @@ public class CameraController extends FirstPersonCameraController {
         super.update();
     }
 
-    public Vector3 moveByRaycast(Vector3 startPoint, Vector3 direction, float movement) {
-
-        Vector3 tmpStart = new Vector3(startPoint);
-        Vector3 tmpDirection = new Vector3(direction);
-        tmpDirection.nor();
-        tmpDirection.scl(movement);
-
-        tmpStart.add(tmpDirection);
-
-
-        Vector3 translation = new Vector3(tmpStart);
-        translation.set(direction);
-        translation.scl(movement);
-
+    public Vector3 moveBy(Vector3 translation) {
 
         int length = 9;
         int h = length / 2;
-
 
         float width = 0.4f;
         float extension = 0.01f;
@@ -113,7 +116,7 @@ public class CameraController extends FirstPersonCameraController {
 
         Vector3 player = getCameraWorldPosition();
 
-        Vector3 playerA = new Vector3(player.x - width, player.y - 1.2f, player.z - width);
+        Vector3 playerA = new Vector3(player.x - width, player.y - 1.4f, player.z - width);
         Vector3 playerB = new Vector3(player.x + width, player.y + 0.4f, player.z + width);
 
 
@@ -254,11 +257,15 @@ public class CameraController extends FirstPersonCameraController {
         }
 
         if (translation.y >= 0) {
-            if (translation.y > distanceY)
+            if (translation.y > distanceY) {
                 translation.y = distanceY - extension;
+                velocity.y = distanceY - extension;
+            }
         } else {
-            if (translation.y < -distanceY)
+            if (translation.y < -distanceY) {
                 translation.y = -distanceY + extension;
+                velocity.y = -distanceY + extension;
+            }
         }
 
 
@@ -292,7 +299,7 @@ public class CameraController extends FirstPersonCameraController {
     public Vector3 getCameraWorldPosition() {
         Vector3 p = camera.position.cpy();
         p.scl(1f / Variables.blockSize);
-        p.add(0.5f, 0, 0.5f);
+        p.add(0.5f, 0.5f, 0.5f);
         return p;
     }
 
@@ -301,6 +308,7 @@ public class CameraController extends FirstPersonCameraController {
         p.add(Variables.blockSize, 0, Variables.blockSize);
         return p;
     }
+
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         touchDragged(screenX, screenY, 0);
@@ -312,17 +320,23 @@ public class CameraController extends FirstPersonCameraController {
         if (keycode == Input.Keys.ESCAPE) {
             Gdx.app.exit();
             new SaveMap().getMap(Grid.blocks);
-        }if(keycode == Input.Keys.NUM_1){
+        }
+        if (keycode == Input.Keys.NUM_1) {
             selectedBlock = Block.Type.Dirt;
-        }if(keycode == Input.Keys.NUM_2){
+        }
+        if (keycode == Input.Keys.NUM_2) {
             selectedBlock = Block.Type.Stone;
-        }if(keycode == Input.Keys.NUM_3){
+        }
+        if (keycode == Input.Keys.NUM_3) {
             selectedBlock = Block.Type.Log;
-        }if(keycode == Input.Keys.NUM_4){
+        }
+        if (keycode == Input.Keys.NUM_4) {
             selectedBlock = Block.Type.Planks;
-        }if(keycode == Input.Keys.NUM_5){
+        }
+        if (keycode == Input.Keys.NUM_5) {
             selectedBlock = Block.Type.Leaves;
-        }if(keycode == Input.Keys.NUM_0){
+        }
+        if (keycode == Input.Keys.NUM_0) {
             selectedBlock = Block.Type.Bedrock;
         }
         return false;
