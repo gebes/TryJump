@@ -76,7 +76,14 @@ public class Block implements Disposable {
         public Integer getId() {
             return id;
         }
-
+        public static Type fromId(Integer id) {
+            for (Type at : Type.values()) {
+                if (at.getId().equals(id)) {
+                    return at;
+                }
+            }
+            return null;
+        }
 
         String getPath() {
             return "block/" + this.toString().toLowerCase() + ".png";

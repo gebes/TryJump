@@ -11,8 +11,12 @@ import java.io.IOException;
 
 public class LoadMap {
     private Block[][][] blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
+<<<<<<< Updated upstream
     private File FILE_NAME = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\.tryjump\\maps\\" + Variables.mapName + ".txt");
     private Block.Type[] blockTypes = intializeTypes();
+=======
+    private File FILE_NAME = new File( System.getProperty("user.home") + "\\AppData\\Roaming\\.tryjump\\maps\\" + Variables.mapName +".txt");
+>>>>>>> Stashed changes
     private final BlockManager blockManager = new BlockManager();
 
     public Block[][][] loadMap() {
@@ -23,8 +27,13 @@ public class LoadMap {
             String tmp = in.readLine();
             input = tmp.split("/");
 
+<<<<<<< Updated upstream
             for (int i = 0; i < input.length; i += 4) {
                 blocks[Integer.parseInt(input[i])][Integer.parseInt(input[i + 1])][Integer.parseInt(input[i + 2])] = blockManager.getBlockFor(blockTypes[Integer.parseInt(input[i + 3])]);
+=======
+            for(int i =0; i<input.length;i+=4){
+                blocks[Integer.parseInt(input[i])][Integer.parseInt(input[i+1])][Integer.parseInt(input[i+2])] = blockManager.getBlockFor(Block.Type.fromId(Integer.parseInt(input[i+3])));
+>>>>>>> Stashed changes
             }
 
         } catch (IOException e) {
@@ -32,9 +41,12 @@ public class LoadMap {
         }
         return blocks;
     }
+<<<<<<< Updated upstream
 
     public Block.Type[] intializeTypes() {
         Block.Type[] tmp = new Block.Type[]{Block.Type.Dirt, Block.Type.Stone, Block.Type.Planks, Block.Type.Log, Block.Type.Leaves};
         return tmp;
     }
+=======
+>>>>>>> Stashed changes
 }
