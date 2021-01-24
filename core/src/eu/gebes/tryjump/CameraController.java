@@ -259,12 +259,12 @@ public class CameraController extends FirstPersonCameraController {
         if (translation.y >= 0) {
             if (translation.y > distanceY) {
                 translation.y = distanceY - extension;
-                velocity.y = distanceY - extension;
+                velocity.y = 0;
             }
         } else {
             if (translation.y < -distanceY) {
                 translation.y = -distanceY + extension;
-                velocity.y = -distanceY + extension;
+                velocity.y = 0;
             }
         }
 
