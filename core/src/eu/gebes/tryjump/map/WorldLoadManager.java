@@ -53,51 +53,32 @@ public class WorldLoadManager {
         Vector3 p = startBlock.getPosition().scl(1f / Variables.blockSize);
         if (out.length() > 0)
             out.append(" ");
-        out.append((int) p.x).append("/").append((int) p.y).append("/").append((int) p.z).append("/").append(currentCount).append("x").append(startBlock.getType().getId());
+        out.append((int) p.x).append("/").append((int) p.y).append("/").append((int) p.z).append("/").append(currentCount).append("/").append(startBlock.getType().getId());
     }
 
     public Block[][][] loadMap() {
 
         Block[][][] blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
-        String[] input;
+        String[] input = null;
 
         try {
             BufferedReader in = new BufferedReader(new FileReader(FILE_NAME));
             input = in.readLine().split(" ");
-        } catch (Exception e) {
 
-            for (int x = 0; x < blocks.length; x++) {
-                for (int y = 0; y < blocks[x].length; y++) {
-                    for (int z = 0; z < blocks[x][y].length; z++) {
-                        if (y == 0)
-                            blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);
+            for(int i=0;i< input.length;i++){
+                String[] oneBlock = input[i].split("/");
+                int x=Integer.parseInt(oneBlock[0]),y=Integer.parseInt(oneBlock[1]),z=Integer.parseInt(oneBlock[2]);
+                Block.Type block = Block.Type.fromId(Integer.parseInt(oneBlock[4]));
+
+                for(int j =0; j<Integer.parseInt(oneBlock[3]);j++){
+                    blocks[x][y][z] = blockManager.getBlockFor(block);
+                    x++;
+                    if(x==Variables.gridWidth){ x=0;z++;
+                        if(z==Variables.gridHeight){ y++;y=0;}
                     }
                 }
-            }
-
-            return blocks;
         }
-
-        int currentIndex = 0;
-        Safe safe = new Safe(input[currentIndex]);
-
-        for (int y = safe.y; y < blocks.length; y++) {
-            for (int x = safe.x; x < blocks[y].length; x++) {
-                for (int z = safe.z; z < blocks[x][y].length; z++) {
-
-                    if (safe.repeat == 0) {
-                        if (currentIndex == input.length) break;
-                        safe = new Safe(input[currentIndex++]);
-                        x = safe.x;
-                        y = safe.y;
-                        z = safe.z;
-                    }
-                    if (safe.repeat != 0) {
-                        blocks[x][y][z] = blockManager.getBlockFor(safe.getBlockType());
-                        safe.repeat--;
-                    }
-                }
-            }
+        } catch (Exception e) {
         }
         return blocks;
     }
