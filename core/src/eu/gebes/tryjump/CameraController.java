@@ -78,7 +78,6 @@ public class CameraController extends FirstPersonCameraController {
             canJump = false;
             newVel.y = 2;
         }
-        System.out.println(velocity);
 
         newVel.sub(0, (gravity/2)* dt, 0);
 
@@ -333,9 +332,7 @@ public class CameraController extends FirstPersonCameraController {
             worldLoadManager.saveMap(Grid.blocks);
             Gdx.app.exit();
         }
-        if(keycode == Input.Keys.Q){
-            new WorldLoadManager().saveMap(Grid.blocks);
-        }
+
         if (keycode == Input.Keys.NUM_1) {
             selectedBlock = Block.Type.Dirt;
         }
