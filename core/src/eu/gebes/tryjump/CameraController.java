@@ -308,7 +308,7 @@ public class CameraController extends FirstPersonCameraController {
     public Vector3 getCameraWorldPosition() {
         Vector3 p = camera.position.cpy();
         p.scl(1f / Variables.blockSize);
-        p.add(0.5f, 0.5f, 0.5f);
+        p.add(0.5f);
         return p;
     }
 
