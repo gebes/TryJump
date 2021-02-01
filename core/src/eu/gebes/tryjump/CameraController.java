@@ -295,8 +295,7 @@ public class CameraController extends FirstPersonCameraController {
 
         for (BoundingBox block : blocks) {
             if (block.intersects(testBox)) {
-                translation.x = 0;
-                translation.z = 0;
+                translation = Vector3.Zero;
                 break;
             }
         }
