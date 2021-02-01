@@ -2,12 +2,11 @@ package eu.gebes.tryjump;
 
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import eu.gebes.tryjump.blocks.Block;
 import eu.gebes.tryjump.blocks.BlockManager;
-import eu.gebes.tryjump.map.LoadMap;
+import eu.gebes.tryjump.map.WorldLoadManager;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
@@ -17,30 +16,13 @@ import lombok.experimental.FieldDefaults;
 public class Grid implements Disposable {
 
     BlockManager blockManager;
-    private LoadMap loadMap= new LoadMap();
+    WorldLoadManager worldLoadManager = new WorldLoadManager();
 
     public static Block[][][] blocks;
 
     public Grid() {
         blockManager = new BlockManager();
-        blocks = loadMap.loadMap();
-
-
-        /*Vector3 center = new Vector3(Variables.gridWidth/2f, Variables.gridHeight/2f, Variables.gridDepth/2f);
-        int radius = 20;
-        int innerRadius = 1;
-        for (int x = 0; x < blocks.length; x++) {
-            for (int y = 0; y < blocks[x].length; y++) {
-                for (int z = 0; z < blocks[x][y].length; z++) {
-                    Vector3 block = new Vector3(x,y,z);
-
-                    float dst = block.dst2(center);
-                    if(dst < (radius * radius) && dst > innerRadius * innerRadius)
-                        blocks[x][y][z]= blockManager.getBlockFor(Block.Type.Log);
-
-                }
-            }
-        }*/
+        blocks = worldLoadManager.loadMap();
         updatePosition();
     }
 
@@ -60,12 +42,11 @@ public class Grid implements Disposable {
 
     }
 
-
     public void renderGrid(ModelBatch batch, Environment environment, CameraController cameraController) {
         for (int x = 0; x < blocks.length; x++) {
             for (int y = 0; y < blocks[x].length; y++) {
                 for (int z = 0; z < blocks[x][y].length; z++) {
-                    if (hasBlock(x, y, z) && isVisible(x, y, z) && cameraController.getCameraWorldPosition().dst2(getBlock(x, y, z).getPosition().scl(1f / Variables.blockSize)) < (100*100))
+                    if (hasBlock(x, y, z) && isVisible(x, y, z) && cameraController.getCameraWorldPosition().dst2(getBlock(x, y, z).getPosition().scl(1f / Variables.blockSize)) < (100 * 100))
                         batch.render(blocks[x][y][z].getInstance(), environment);
                 }
             }
@@ -121,7 +102,7 @@ public class Grid implements Disposable {
         int lastPointY = 0;
         int lastPointZ = 0;
 
-        for (int i = 1; i < Variables.blockSize*10; i++) {
+        for (int i = 1; i < Variables.blockSize * 10; i++) {
             Vector3 tmpStart = new Vector3(startPoint);
             Vector3 tmpDirection = new Vector3(direction);
             tmpDirection.nor();

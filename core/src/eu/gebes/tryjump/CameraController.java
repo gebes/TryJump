@@ -7,8 +7,7 @@ import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import eu.gebes.tryjump.blocks.Block;
-import eu.gebes.tryjump.map.MarkusLoadManager;
-import eu.gebes.tryjump.map.SaveMap;
+import eu.gebes.tryjump.map.WorldLoadManager;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
@@ -81,7 +80,7 @@ public class CameraController extends FirstPersonCameraController {
         }
         System.out.println(velocity);
 
-        newVel.sub(0, gravity * dt/2, 0);
+        newVel.sub(0, (gravity/2)* dt, 0);
 
         velocity = newVel;
 
@@ -94,7 +93,9 @@ public class CameraController extends FirstPersonCameraController {
             camera.position.x = 0;
         if (camera.position.y < Variables.blockSize) {
             camera.position.y = Variables.blockSize;
-            velocity.y = 0;
+            if(velocity.y <= 0){
+                velocity.y = 0;
+            }
         }
         if (camera.position.z < 0)
             camera.position.z = 0;
@@ -324,12 +325,16 @@ public class CameraController extends FirstPersonCameraController {
         return super.mouseMoved(screenX, screenY);
     }
 
+    WorldLoadManager worldLoadManager = new WorldLoadManager();
+
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE) {
+            worldLoadManager.saveMap(Grid.blocks);
             Gdx.app.exit();
-            new SaveMap().getMap(Grid.blocks);
-            new MarkusLoadManager().getMap(Grid.blocks);
+        }
+        if(keycode == Input.Keys.Q){
+            new WorldLoadManager().saveMap(Grid.blocks);
         }
         if (keycode == Input.Keys.NUM_1) {
             selectedBlock = Block.Type.Dirt;

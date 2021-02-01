@@ -19,6 +19,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Arrays;
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
 public class Block implements Disposable {
@@ -65,28 +67,18 @@ public class Block implements Disposable {
     public enum Type {
 
 
-        Dirt(0), Stone(1), Planks(2), Log(3), Leaves(4), Bedrock(5);
-
-        private Integer id;
-
-        Type(Integer value) {
-            this.id = value;
-        }
+        Dirt, Stone, Planks, Log, Leaves, Bedrock;
 
         public Integer getId() {
-            return id;
+            return Arrays.asList(values()).indexOf(this);
         }
+
         public static Type fromId(Integer id) {
-            for (Type at : Type.values()) {
-                if (at.getId().equals(id)) {
-                    return at;
-                }
-            }
-            return null;
+            return values()[id];
         }
 
         String getPath() {
-            return "block/" + this.toString().toLowerCase() + ".png";
+            return "block1/" + this.toString().toLowerCase() + ".png";
         }
 
     }
