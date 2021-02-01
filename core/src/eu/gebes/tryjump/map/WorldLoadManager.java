@@ -4,12 +4,8 @@ import com.badlogic.gdx.math.Vector3;
 import eu.gebes.tryjump.Variables;
 import eu.gebes.tryjump.blocks.Block;
 import eu.gebes.tryjump.blocks.BlockManager;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.List;
 
 public class WorldLoadManager {
     private final BlockManager blockManager = new BlockManager();
@@ -57,7 +53,6 @@ public class WorldLoadManager {
     }
 
     public Block[][][] loadMap() {
-
         Block[][][] blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
         String[] input = null;
 
@@ -68,6 +63,7 @@ public class WorldLoadManager {
             for(int i=0;i< input.length;i++){
                 String[] oneBlock = input[i].split("/");
                 int x=Integer.parseInt(oneBlock[0]),y=Integer.parseInt(oneBlock[1]),z=Integer.parseInt(oneBlock[2]);
+
                 Block.Type block = Block.Type.fromId(Integer.parseInt(oneBlock[4]));
 
                 for(int j =0; j<Integer.parseInt(oneBlock[3]);j++){
@@ -77,7 +73,7 @@ public class WorldLoadManager {
                         if(z==Variables.gridHeight){ y++;y=0;}
                     }
                 }
-        }
+            }
         } catch (Exception e) {
         }
         return blocks;
