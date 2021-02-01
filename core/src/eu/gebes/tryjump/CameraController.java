@@ -41,12 +41,14 @@ public class CameraController extends FirstPersonCameraController {
     Vector3 velocity = Vector3.Zero;
     float gravity = 9.81f;
     float movementSpeed = 16f;
+    boolean canJump = false;
+    float floorDistance = 1000;
 
     @Override
     public void update() {
         float dt = Gdx.graphics.getDeltaTime();
 
-        velocity.scl(0.1f * dt, 1, 0.1f * dt);
+        velocity.scl(0.9f * dt, 1, 0.9f * dt);
 
 
         Vector3 camDir = camera.direction.cpy();
@@ -57,20 +59,24 @@ public class CameraController extends FirstPersonCameraController {
 
         float val = movementSpeed * dt;
 
+        float v = val;
+        if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
+            v *= 1.98123;
         Vector3 newVel = new Vector3(velocity);
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            newVel.add(camDir.scl(val));
+            newVel.add(camDir.scl(v));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             newVel.sub(camDir.scl(val));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            newVel.add(camRight.scl(val));
+            newVel.add(camRight.scl(v));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            newVel.sub(camRight.scl(val));
+            newVel.sub(camRight.scl(v));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && (velocity.y >= -1 && velocity.y < 1)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && canJump && floorDistance < 0.5) {
+            canJump = false;
             newVel.y = 2;
         }
         System.out.println(velocity);
@@ -265,7 +271,9 @@ public class CameraController extends FirstPersonCameraController {
         } else {
             if (translation.y < -distanceY) {
                 velocity.y = -distanceY + extension;
-                //velocity.y = 0;
+               // velocity.y = 0;
+                floorDistance = distanceY;
+                canJump = true;
             }
         }
 
