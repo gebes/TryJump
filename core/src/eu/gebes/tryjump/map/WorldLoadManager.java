@@ -83,26 +83,6 @@ public class WorldLoadManager {
         return blocks;
     }
 
-    @Data
-    @AllArgsConstructor
-    static
-    class Safe {
-
-        int x, y, z;
-        Block.Type blockType;
-        int repeat;
-
-        public Safe(String input) {
-            String[] split = input.split("/");
-            this.x = Integer.parseInt(split[0]);
-            this.y = Integer.parseInt(split[1]);
-            this.z = Integer.parseInt(split[2]);
-            split = split[3].split("x");
-            this.repeat = Integer.parseInt(split[0]);
-            this.blockType = Block.Type.fromId(Integer.parseInt(split[1]));
-        }
-    }
-
     private void saveToFile(String map) {
         try {
 
