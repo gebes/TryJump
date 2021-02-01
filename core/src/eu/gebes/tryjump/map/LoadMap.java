@@ -20,12 +20,25 @@ public class LoadMap {
         try {
             BufferedReader in  = new BufferedReader(new FileReader(FILE_NAME));
             String tmp = in.readLine();
-            input= tmp.split("/");
+            input= tmp.split("-");
 
-            for(int i =0; i<input.length;i+=4){
-                blocks[Integer.parseInt(input[i])][Integer.parseInt(input[i+1])][Integer.parseInt(input[i+2])] = blockManager.getBlockFor(Block.Type.fromId(Integer.parseInt(input[i+3])));
+            for(int i=0;i< input.length;i++){
+                String[] oneBlock = input[i].split("/");
+
+                int x=Integer.parseInt(oneBlock[0]),y=Integer.parseInt(oneBlock[1]),z=Integer.parseInt(oneBlock[2]);
+                int tmpX=x,tmpY=y,tmpZ=z;
+                Block.Type block = Block.Type.fromId(Integer.parseInt(oneBlock[4]));
+
+                for(int j =0; j<Integer.parseInt(oneBlock[3]);j++){
+                    blocks[tmpX][tmpY][tmpZ] = blockManager.getBlockFor(block);
+                    tmpX++;
+
+                    if(tmpX==Variables.gridWidth){
+                        tmpX=0;tmpZ++;
+                        if(tmpZ==Variables.gridHeight){ tmpY++;tmpZ=0;}
+                    }
+                }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
