@@ -11,6 +11,7 @@ import eu.gebes.tryjump.map.WorldLoadManager;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigInteger;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -92,6 +93,7 @@ public class CameraController extends FirstPersonCameraController {
             camera.position.x = 0;
         if (camera.position.y < Variables.blockSize) {
             camera.position.y = Variables.blockSize;
+            canJump = true;
             if(velocity.y <= 0){
                 velocity.y = 0;
             }
