@@ -18,9 +18,9 @@ public class WorldLoadManager {
         Block startBlock = null;
         int currentCount = 0;
 
-        for (int y = 0; y < blocks.length; y++) {
-            for (int x = 0; x < blocks[y].length; x++) {
-                for (int z = 0; z < blocks[x][y].length; z++) {
+        for (int y = 0; y < Variables.gridHeight; y++) {
+            for (int z = 0; z < Variables.gridDepth; z++) {
+                for (int x = 0; x < Variables.gridWidth; x++) {
 
                     if (startBlock != null && (blocks[x][y][z] == null || !blocks[x][y][z].getType().equals(startBlock.getType()))) {
 
@@ -62,8 +62,10 @@ public class WorldLoadManager {
 
             for(int i=0;i< input.length;i++){
                 String[] oneBlock = input[i].split("/");
-                int x=Integer.parseInt(oneBlock[0]),y=Integer.parseInt(oneBlock[1]),z=Integer.parseInt(oneBlock[2]);
 
+                int x=Integer.parseInt(oneBlock[0]),
+                        y=Integer.parseInt(oneBlock[1]),
+                         z=Integer.parseInt(oneBlock[2]);
                 Block.Type block = Block.Type.fromId(Integer.parseInt(oneBlock[4]));
 
                 for(int j =0; j<Integer.parseInt(oneBlock[3]);j++){

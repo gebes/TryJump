@@ -32,6 +32,8 @@ public class Grid implements Disposable {
                 Variables.gridDepth
         );
 
+        blocks = worldGenerator.generate();
+
 
         updatePosition();
     }
