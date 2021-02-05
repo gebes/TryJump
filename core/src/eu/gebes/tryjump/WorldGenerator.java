@@ -22,9 +22,6 @@ public class WorldGenerator {
             for (int y = 0; y < height; y++) {
                 for (int z = 0; z < depth; z++) {
 
-                    if(y % 10 == 0){
-                        blocks[x][y][z] = blockManager.getBlockFor(Block.Type.Dirt);
-                    }
 
                 }
             }
