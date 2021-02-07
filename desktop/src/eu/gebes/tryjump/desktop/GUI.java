@@ -1,6 +1,7 @@
 package eu.gebes.tryjump.desktop;
 
 import eu.gebes.tryjump.desktop.game.StartApplication;
+import eu.gebes.tryjump.desktop.map.MapPane;
 import eu.gebes.tryjump.desktop.settings.SettingsPane;
 import eu.gebes.tryjump.desktop.settings.SettingsSave;
 
@@ -8,20 +9,20 @@ import javax.swing.*;
 import java.awt.*;
 
 public class GUI {
-    private static StartApplication startApplication;
-    private static StartGUI startGuiClass = new StartGUI();
-    private static JFrame frame = new JFrame();
-    private static SettingsSave save = new SettingsSave();
-    private static SettingsPane settingsPaneClass = new SettingsPane();
+    private final MapPane mapPane = new MapPane();
+    private final StartGUI startGuiClass = new StartGUI();
+    private final JFrame frame = new JFrame();
+    private final SettingsSave save = new SettingsSave();
+    private final SettingsPane settingsPaneClass = new SettingsPane();
 
     public void initComponents(String[] arg) {
-        startApplication = new StartApplication(arg);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(330,300);
         final JPanel  panel = startGuiClass.main();
         JButton startButton = startGuiClass.settingsButton();
         JButton settingsButton = startGuiClass.startButton();
         final JPanel settings = settingsPaneClass.panel();
+        final JPanel map = mapPane.mapPane();
         JButton backButton = settingsPaneClass.backButton();
 
         panel.add(startButton);
@@ -33,8 +34,8 @@ public class GUI {
 
         startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
-                startApplication.startGame(settingsPaneClass.getWidth(), settingsPaneClass.getHeight(), settingsPaneClass.getFov(), settingsPaneClass.isFullscreenBool(), settingsPaneClass.getVolume());
-                frame.dispose();
+                frame.setContentPane(map);
+                frame.setSize(330,310);
             }
 
         });

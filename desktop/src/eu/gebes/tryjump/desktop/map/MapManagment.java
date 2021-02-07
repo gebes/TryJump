@@ -1,4 +1,4 @@
-package eu.gebes.tryjump.desktop.settings;
+package eu.gebes.tryjump.desktop.map;
 
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
@@ -15,11 +15,11 @@ import java.util.List;
 
 
 @FieldDefaults(level = AccessLevel.PUBLIC)
-public class SettingsSave {
-    private final String[] settings = new String[6];
-    private static final String home = System.getProperty("user.home");
-    private static final File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
-    private static final File FILE_NAME = new File(FILE_DIRECTORY + "\\settings.txt");
+public class MapManagment {
+    private String[] maps;
+    private final String home = System.getProperty("user.home");
+    private final File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
+    private final File FILE_NAME = new File(FILE_DIRECTORY + "\\maps.txt");
 
     @SneakyThrows
     @PostConstruct
@@ -28,14 +28,20 @@ public class SettingsSave {
         try {
             BufferedReader in  = new BufferedReader(new FileReader(FILE_NAME));
 
+            String[] tmp = new String[100];
             int count=0;
-            while ((settings[count] = in.readLine()) != null) {
+            while ((tmp[count] = in.readLine()) != null) {
                 count++;
+            }
+
+            maps = new String[count];
+            for(int i =0;i<count;i++){
+                maps[i]=tmp[i];
             }
             in.close();
         } catch (FileNotFoundException e) {
             FILE_DIRECTORY.mkdirs();
-            List<String> lines = Arrays.asList("1920", "1080", "70", "0", "false");
+            List<String> lines = Arrays.asList("Jump1", "Jump2", "Jump3");
             Files.write(Paths.get(String.valueOf(FILE_NAME)),
                     lines
                     ,StandardCharsets.UTF_8,
@@ -46,7 +52,7 @@ public class SettingsSave {
             throw new RuntimeException("Error initializing stream", e);
         }
 
-        return settings;
+        return maps;
     }
 
     public synchronized void save(String[] settings) {
@@ -65,5 +71,9 @@ public class SettingsSave {
         } catch (IOException e) {
             throw new RuntimeException("Error initializing stream", e);
         }
+    }
+
+    public String[] getSettings() {
+        return maps;
     }
 }

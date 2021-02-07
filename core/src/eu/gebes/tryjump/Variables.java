@@ -11,7 +11,7 @@ public class Variables {
 
     public static final float crosshairSize = 100;
 
-    public static int gridWidth = 50, gridHeight = 50, gridDepth = 50;
+    public static int gridWidth = 250, gridHeight = 50, gridDepth = 51;
     public static final int blockSize = 5;
 
     public static int musicVolume = 0;

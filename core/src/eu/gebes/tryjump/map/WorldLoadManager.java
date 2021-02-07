@@ -9,7 +9,7 @@ import java.io.*;
 
 public class WorldLoadManager {
     private final BlockManager blockManager = new BlockManager();
-    private final File FILE_NAME = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\.tryjump\\maps\\level.data");
+    private final File FILE_NAME = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\.tryjump\\maps\\"+Variables.mapName+".map");
 
 
     public void saveMap(Block[][][] blocks) {
@@ -56,9 +56,18 @@ public class WorldLoadManager {
         Block[][][] blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
         String[] input = null;
 
+
         try {
-            BufferedReader in = new BufferedReader(new FileReader(FILE_NAME));
+            BufferedReader in;
+            if(Variables.mapName.equals("Jump1")||Variables.mapName.equals("Jump2")||Variables.mapName.equals("Jump3")){
+                InputStream file = getClass().getResourceAsStream("/maps/"+Variables.mapName+".map");
+                in = new BufferedReader(new InputStreamReader(file));
+            }else {
+                in = new BufferedReader(new FileReader(FILE_NAME));
+            }
             input = in.readLine().split(" ");
+            System.out.println(input);
+
 
             for(int i=0;i< input.length;i++){
                 String[] oneBlock = input[i].split("/");
@@ -75,6 +84,7 @@ public class WorldLoadManager {
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return blocks;
     }

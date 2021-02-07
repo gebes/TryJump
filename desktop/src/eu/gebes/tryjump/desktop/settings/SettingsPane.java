@@ -82,22 +82,6 @@ public class SettingsPane {
         return backButton;
    }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-    public void setHeight(int height) {
-        this.height = height;
-    }
-    public void setFov(int fov) {
-        this.fov = fov;
-    }
-    public void setVolume(int volume) {
-        this.volume = volume;
-    }
-    public void setFullscreenBool(boolean fullscreenBool) {
-        this.fullscreenBool = fullscreenBool;
-    }
-
     public int getVolume() {
         return volume;
     }
