@@ -17,10 +17,11 @@ public class WorldLoadManager {
         StringBuilder out = new StringBuilder();
         Block startBlock = null;
         int currentCount = 0;
+        out.append(Variables.endX+"/"+Variables.endY+"/"+Variables.endZ+"|");
 
-        for (int y = 0; y < blocks.length; y++) {
-            for (int x = 0; x < blocks[y].length; x++) {
-                for (int z = 0; z < blocks[x][y].length; z++) {
+        for (int y = 0; y < Variables.gridHeight; y++) {
+            for (int z = 0; z < Variables.gridDepth; z++) {
+                for (int x = 0; x < Variables.gridWidth; x++) {
 
                     if (startBlock != null && (blocks[x][y][z] == null || !blocks[x][y][z].getType().equals(startBlock.getType()))) {
 
@@ -65,7 +66,12 @@ public class WorldLoadManager {
             }else {
                 in = new BufferedReader(new FileReader(FILE_NAME));
             }
-            input = in.readLine().split(" ");
+            String[] tmp = in.readLine().split("I");
+            String[] endCoord = tmp[0].split("/");
+            Variables.endX= Integer.parseInt(endCoord[0]);
+            Variables.endY= Integer.parseInt(endCoord[1]);
+            Variables.endZ= Integer.parseInt(endCoord[2]);
+            input = tmp[1].split(" ");
             System.out.println(input);
 
 

@@ -1,9 +1,7 @@
 package eu.gebes.tryjump.desktop;
 
-import eu.gebes.tryjump.desktop.game.StartApplication;
 import eu.gebes.tryjump.desktop.map.MapPane;
 import eu.gebes.tryjump.desktop.settings.SettingsPane;
-import eu.gebes.tryjump.desktop.settings.SettingsSave;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +9,10 @@ import java.awt.*;
 public class GUI {
     private final MapPane mapPane = new MapPane();
     private final StartGUI startGuiClass = new StartGUI();
-    private final JFrame frame = new JFrame();
-    private final SettingsSave save = new SettingsSave();
+    private static final JFrame frame = new JFrame();
     private final SettingsPane settingsPaneClass = new SettingsPane();
 
-    public void initComponents(String[] arg) {
+    public void initComponents() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(330,300);
         final JPanel  panel = startGuiClass.main();
@@ -60,5 +57,9 @@ public class GUI {
         int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
         frame.setLocation(x, y);
+    }
+
+    public static JFrame getFrame() {
+        return frame;
     }
 }

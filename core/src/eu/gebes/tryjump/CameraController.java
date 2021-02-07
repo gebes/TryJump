@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 import eu.gebes.tryjump.blocks.Block;
+import eu.gebes.tryjump.map.MapManagment;
 import eu.gebes.tryjump.map.WorldLoadManager;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -20,11 +21,14 @@ public class CameraController extends FirstPersonCameraController {
     Block.Type selectedBlock = Block.Type.Stone;
     final Camera camera;
     final Grid grid;
+    StopWatch stopWatch = new StopWatch();
+    MapManagment mapManagment =new MapManagment();
 
     public CameraController(Camera camera, Grid grid) {
         super(camera);
         this.camera = camera;
         this.grid = grid;
+        stopWatch.start();
     }
 
     @Override
@@ -309,6 +313,7 @@ public class CameraController extends FirstPersonCameraController {
         Vector3 p = camera.position.cpy();
         p.scl(1f / Variables.blockSize);
         p.add(0.5f);
+        if(((int)p.x)==Variables.endX&&((int)p.y)==Variables.endY&&((int)p.z)==Variables.endZ){stopGame();}
         return p;
     }
 
@@ -329,8 +334,7 @@ public class CameraController extends FirstPersonCameraController {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE) {
-            worldLoadManager.saveMap(Grid.blocks);
-            Gdx.app.exit();
+            stopGame();
         }
 
         if (keycode == Input.Keys.NUM_1) {
@@ -352,6 +356,14 @@ public class CameraController extends FirstPersonCameraController {
             selectedBlock = Block.Type.Bedrock;
         }
         return false;
+    }
+
+    private void stopGame(){
+        worldLoadManager.saveMap(Grid.blocks);
+        stopWatch.stop();
+        Variables.time = (int) stopWatch.getElapsedTimeSecs();
+        MapManagment.save();
+        Gdx.app.exit();
     }
 
 }

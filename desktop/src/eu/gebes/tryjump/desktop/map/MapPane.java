@@ -1,6 +1,7 @@
 package eu.gebes.tryjump.desktop.map;
 
 import eu.gebes.tryjump.Variables;
+import eu.gebes.tryjump.desktop.GUI;
 import eu.gebes.tryjump.desktop.game.StartApplication;
 import eu.gebes.tryjump.desktop.settings.SettingsPane;
 
@@ -12,10 +13,11 @@ import java.awt.*;
 public class MapPane {
     private final MapManagment mapManagment = new MapManagment();
     private String[] maps = mapManagment.load();
-    private static StartApplication startApplication = new StartApplication();
-    private static SettingsPane settingsPaneClass = new SettingsPane();
+    private final StartApplication startApplication = new StartApplication();
+    private final SettingsPane settingsPaneClass = new SettingsPane();
 
     public JPanel mapPane(){
+        Variables.maps = maps;
         JPanel mapSelector = new JPanel();
         JLabel header = new JLabel("MAPS");
         header.setFont(new java.awt.Font("Tahoma", 1, 28));
@@ -31,8 +33,14 @@ public class MapPane {
     }
 
     private JButton button(String text){
-        final String  name = text;
-        JButton button = new JButton(text);
+        String[] both = text.split(":");
+        final String name = both[0];
+        JButton button = null;
+        if(both[1].equals("10000")){
+            button = new JButton(both[0]);
+        }else{
+            button = new JButton(both[0] + " Sec: "+both[1]);
+        }
         button.setFont(new java.awt.Font("Tahoma", 1, 28));
         button.setPreferredSize(new Dimension(300, 50));
         button.setHorizontalAlignment(SwingConstants.CENTER);
@@ -42,6 +50,7 @@ public class MapPane {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 Variables.mapName = name;
                 startApplication.startGame(settingsPaneClass.getWidth(), settingsPaneClass.getHeight(), settingsPaneClass.getFov(), settingsPaneClass.isFullscreenBool(), settingsPaneClass.getVolume());
+                GUI.getFrame().dispose();
             }
         });
 

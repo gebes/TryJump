@@ -41,7 +41,7 @@ public class MapManagment {
             in.close();
         } catch (FileNotFoundException e) {
             FILE_DIRECTORY.mkdirs();
-            List<String> lines = Arrays.asList("Jump1", "Jump2", "Jump3");
+            List<String> lines = Arrays.asList("Jump1:10000", "Jump2:10000", "Jump3:10000");
             Files.write(Paths.get(String.valueOf(FILE_NAME)),
                     lines
                     ,StandardCharsets.UTF_8,

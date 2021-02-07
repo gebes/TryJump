@@ -26,6 +26,7 @@ public class TryJump extends ApplicationAdapter {
     CameraController cameraController;
     Grid grid;
 
+
     @Override
     public void create() {
         music();
@@ -40,7 +41,7 @@ public class TryJump extends ApplicationAdapter {
         modelBatch = new ModelBatch();
 
         camera = new PerspectiveCamera(Variables.FOV, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.position.set(Variables.gridWidth / 2f * Variables.blockSize, 50 * Variables.blockSize, Variables.gridDepth / 2f * Variables.blockSize);
+        camera.position.set(0,100,130);
 
 
         camera.near = Variables.cameraNear;

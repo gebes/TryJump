@@ -15,5 +15,11 @@ public class Variables {
     public static final int blockSize = 5;
 
     public static int musicVolume = 0;
-    public static String mapName = "optimised2";
+    public static String mapName = "1";
+    public static int endX = 99;
+    public static int endY = 99;
+    public static int endZ = 99;
+    public static String[] maps;
+
+    public static int time = 0;
 }
