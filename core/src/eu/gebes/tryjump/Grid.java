@@ -18,28 +18,25 @@ public class Grid implements Disposable {
     BlockManager blockManager;
     WorldLoadManager worldLoadManager = new WorldLoadManager();
 
-
-
-
     public static Block[][][] blocks;
+
     public Grid() {
         blockManager = new BlockManager();
+      //  blocks = worldLoadManager.loadMap();
 
-        WorldGenerator worldGenerator = new WorldGenerator(
-                blockManager,
-                Variables.gridWidth,
-                Variables.gridHeight,
-                Variables.gridDepth
-        );
-
-        blocks = worldGenerator.generate();
-
+         blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
+        for (int y = 0; y < blocks.length; y++) {
+            for (int x = 0; x < blocks[y].length; x++) {
+                for (int z = 0; z < blocks[x][y].length; z++) {
+                    if(y < 3)
+                        setBlock(x, y, z, blockManager.getBlockFor(Block.Type.Dirt));
+                    if(y == 3)
+                        setBlock(x, y, z, blockManager.getBlockFor(Block.Type.Stone));
+                }
+            }
+        }
         updatePosition();
     }
-
-
-
-
 
     public void updatePosition() {
         for (int i = 0; i < Variables.gridWidth; i++) {
@@ -84,11 +81,11 @@ public class Grid implements Disposable {
 
     public boolean isHidden(int x, int y, int z) {
         return getBlock(x + 1, y, z) != null &&
-                getBlock(x - 1, y, z) != null &&
-                getBlock(x, y + 1, z) != null &&
-                getBlock(x, y - 1, z) != null &&
-                getBlock(x, y, z + 1) != null &&
-                getBlock(x, y, z - 1) != null;
+               getBlock(x - 1, y, z) != null &&
+               getBlock(x, y + 1, z) != null &&
+               getBlock(x, y - 1, z) != null &&
+               getBlock(x, y, z + 1) != null &&
+               getBlock(x, y, z - 1) != null;
     }
 
     public Block getBlock(int x, int y, int z) {
