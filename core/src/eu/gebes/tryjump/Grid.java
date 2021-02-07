@@ -22,19 +22,7 @@ public class Grid implements Disposable {
 
     public Grid() {
         blockManager = new BlockManager();
-      //  blocks = worldLoadManager.loadMap();
-
-         blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
-        for (int y = 0; y < blocks.length; y++) {
-            for (int x = 0; x < blocks[y].length; x++) {
-                for (int z = 0; z < blocks[x][y].length; z++) {
-                    if(y < 3)
-                        setBlock(x, y, z, blockManager.getBlockFor(Block.Type.Dirt));
-                    if(y == 3)
-                        setBlock(x, y, z, blockManager.getBlockFor(Block.Type.Stone));
-                }
-            }
-        }
+        blocks = worldLoadManager.loadMap();
         updatePosition();
     }
 
