@@ -29,6 +29,13 @@ public class CameraController extends FirstPersonCameraController {
         this.camera = camera;
         this.grid = grid;
         stopWatch.start();
+        if(!(Variables.create)){
+            gravity = 9.81f;
+            movementSpeed = 16f;
+        }else{
+            gravity = 2;
+            movementSpeed = 10f;
+        }
     }
 
     @Override
@@ -45,8 +52,8 @@ public class CameraController extends FirstPersonCameraController {
     }
 
     Vector3 velocity = Vector3.Zero;
-    float gravity = 9.81f;
-    float movementSpeed = 16f;
+    float gravity;
+    float movementSpeed;
     boolean canJump = false;
     float floorDistance = 1000;
 
@@ -82,8 +89,14 @@ public class CameraController extends FirstPersonCameraController {
             newVel.sub(camRight.scl(v));
         }
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && canJump && floorDistance < 0.5) {
-            canJump = false;
-            newVel.y = 2;
+            if(!(Variables.create)){
+                canJump = false;
+                newVel.y = 2;
+            }else{
+                canJump = true;
+                newVel.y = 0.2f;
+            }
+
         }
 
         newVel.sub(0, (gravity/2)* dt, 0);
@@ -161,9 +174,7 @@ public class CameraController extends FirstPersonCameraController {
                     int y = (int) (player.y - h + j);
                     int z = (int) (player.z - h + k);
 
-      /*  for (int x = 0; x < Variables.gridSize; x++) {
-            for (int y = 0; y < Variables.gridSize; y++) {
-                for (int z = 0; z < Variables.gridSize; z++) {*/
+
                     Block block = grid.getBlock(x, y, z);
 
                     if (block == null) continue;
@@ -273,12 +284,12 @@ public class CameraController extends FirstPersonCameraController {
         if (translation.y >= 0) {
             if (translation.y > distanceY) {
                 velocity.y = distanceY - extension;
-                velocity.y = 0;
+                //velocity.y = 0;
             }
         } else {
             if (translation.y < -distanceY) {
                 velocity.y = -distanceY + extension;
-                velocity.y = 0;
+                //velocity.y = 0;
                 floorDistance = distanceY;
                 canJump = true;
             }
@@ -317,13 +328,7 @@ public class CameraController extends FirstPersonCameraController {
         p.scl(1f / Variables.blockSize);
         p.add(0.5f);
         if(((int)p.x)==Variables.endX&&((int)p.y)==Variables.endY&&((int)p.z)==Variables.endZ){wonGame();}
-        if(p.y<3){ fallDown(); }
-        return p;
-    }
-
-    public Vector3 getCameraPosition() {
-        Vector3 p = camera.position.cpy();
-        p.add(Variables.blockSize, 0, Variables.blockSize);
+        if(p.y<3&&!Variables.create){ fallDown(); }
         return p;
     }
 

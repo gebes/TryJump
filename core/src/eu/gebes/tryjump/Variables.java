@@ -22,5 +22,5 @@ public class Variables {
     public static String[] maps;
 
     public static int time = 0;
-    public static boolean create = false;
+    public static boolean create = true;
 }
