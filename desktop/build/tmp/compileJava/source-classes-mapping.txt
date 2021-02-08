@@ -13,8 +13,6 @@ eu/gebes/tryjump/desktop/settings/SettingsSave.java
  eu.gebes.tryjump.desktop.settings.SettingsSave
 eu/gebes/tryjump/desktop/map/MapManagment.java
  eu.gebes.tryjump.desktop.map.MapManagment
-eu/gebes/tryjump/desktop/game/StartApplication.java
- eu.gebes.tryjump.desktop.game.StartApplication
 eu/gebes/tryjump/desktop/GUI.java
  eu.gebes.tryjump.desktop.GUI
  eu.gebes.tryjump.desktop.GUI$1
@@ -23,3 +21,5 @@ eu/gebes/tryjump/desktop/GUI.java
 eu/gebes/tryjump/desktop/map/MapPane.java
  eu.gebes.tryjump.desktop.map.MapPane
  eu.gebes.tryjump.desktop.map.MapPane$1
+eu/gebes/tryjump/desktop/game/StartApplication.java
+ eu.gebes.tryjump.desktop.game.StartApplication

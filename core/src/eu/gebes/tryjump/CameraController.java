@@ -33,11 +33,14 @@ public class CameraController extends FirstPersonCameraController {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (button == 0) {
-            grid.editBoxByRayCast(camera.position, camera.direction, null);
-        } else if (button == 1) {
-            grid.editBoxByRayCast(camera.position, camera.direction, selectedBlock);
+        if(Variables.create){
+            if (button == 0) {
+                grid.editBoxByRayCast(camera.position, camera.direction, null);
+            } else if (button == 1) {
+                grid.editBoxByRayCast(camera.position, camera.direction, selectedBlock);
+            }
         }
+
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
@@ -270,12 +273,12 @@ public class CameraController extends FirstPersonCameraController {
         if (translation.y >= 0) {
             if (translation.y > distanceY) {
                 velocity.y = distanceY - extension;
-                //velocity.y = 0;
+                velocity.y = 0;
             }
         } else {
             if (translation.y < -distanceY) {
                 velocity.y = -distanceY + extension;
-               // velocity.y = 0;
+                velocity.y = 0;
                 floorDistance = distanceY;
                 canJump = true;
             }
@@ -313,7 +316,8 @@ public class CameraController extends FirstPersonCameraController {
         Vector3 p = camera.position.cpy();
         p.scl(1f / Variables.blockSize);
         p.add(0.5f);
-        if(((int)p.x)==Variables.endX&&((int)p.y)==Variables.endY&&((int)p.z)==Variables.endZ){stopGame();}
+        if(((int)p.x)==Variables.endX&&((int)p.y)==Variables.endY&&((int)p.z)==Variables.endZ){wonGame();}
+        if(p.y<3){ fallDown(); }
         return p;
     }
 
@@ -359,11 +363,19 @@ public class CameraController extends FirstPersonCameraController {
     }
 
     private void stopGame(){
-        worldLoadManager.saveMap(Grid.blocks);
+        Gdx.app.exit();
+    }
+    private void wonGame(){
+        //worldLoadManager.saveMap(Grid.blocks);
         stopWatch.stop();
         Variables.time = (int) stopWatch.getElapsedTimeSecs();
         MapManagment.save();
         Gdx.app.exit();
     }
 
+    private void fallDown(){
+        stopWatch.stop();
+        stopWatch.start();
+        camera.position.set(0,100,130);
+    }
 }
