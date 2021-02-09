@@ -32,7 +32,7 @@ public class GUI {
         startButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 frame.setContentPane(map);
-                frame.setSize(330,310);
+                frame.setSize(330,360);
             }
 
         });

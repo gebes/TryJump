@@ -17,7 +17,7 @@ public class WorldLoadManager {
         StringBuilder out = new StringBuilder();
         Block startBlock = null;
         int currentCount = 0;
-        out.append(Variables.endX+"/"+Variables.endY+"/"+Variables.endZ+"|");
+        out.append(Variables.endX+"/"+Variables.endY+"/"+Variables.endZ+"I");
 
         for (int y = 0; y < Variables.gridHeight; y++) {
             for (int z = 0; z < Variables.gridDepth; z++) {
@@ -48,15 +48,12 @@ public class WorldLoadManager {
 
     private void appendToBuilder(StringBuilder out, Block startBlock, int currentCount) {
         Vector3 p = startBlock.getPosition().scl(1f / Variables.blockSize);
-        if (out.length() > 0)
-            out.append(" ");
-        out.append((int) p.x).append("/").append((int) p.y).append("/").append((int) p.z).append("/").append(currentCount).append("/").append(startBlock.getType().getId());
+        out.append((int) p.x).append("/").append((int) p.y).append("/").append((int) p.z).append("/").append(currentCount).append("/").append(startBlock.getType().getId()).append(" ");
     }
 
     public Block[][][] loadMap() {
         Block[][][] blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
         String[] input = null;
-
 
         try {
             BufferedReader in;
@@ -72,7 +69,6 @@ public class WorldLoadManager {
             Variables.endY= Integer.parseInt(endCoord[1]);
             Variables.endZ= Integer.parseInt(endCoord[2]);
             input = tmp[1].split(" ");
-            System.out.println(input);
 
 
             for(int i=0;i< input.length;i++){
@@ -97,7 +93,6 @@ public class WorldLoadManager {
 
     private void saveToFile(String map) {
         try {
-
             BufferedWriter outputWriter= new BufferedWriter(new FileWriter(FILE_NAME));
 
             outputWriter.write(map);
@@ -105,7 +100,12 @@ public class WorldLoadManager {
             outputWriter.flush();
             outputWriter.close();
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("File not found", e);
+            try {
+                FILE_NAME.createNewFile();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+            saveToFile(map);
         } catch (IOException e) {
             throw new RuntimeException("Error initializing stream", e);
         }

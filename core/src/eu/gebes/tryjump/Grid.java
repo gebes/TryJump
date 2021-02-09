@@ -22,7 +22,12 @@ public class Grid implements Disposable {
 
     public Grid() {
         blockManager = new BlockManager();
-        blocks = worldLoadManager.loadMap();
+        if(!Variables.create){
+            blocks = worldLoadManager.loadMap();
+        }else{
+            blocks = new Block[250][50][51];
+            blocks[0][15][26]=blockManager.getBlockFor(Block.Type.Diamond);
+        }
         updatePosition();
     }
 
@@ -58,8 +63,9 @@ public class Grid implements Disposable {
         return blocks[x][y][z] != null;
     }
 
-    public void setBlock(int x, int y, int z, Block block) {
-        blocks[x][y][z] = block;
+    public void setBlock(int x, int y, int z, Block.Type block) {
+        blocks[x][y][z] = blockManager.getBlockFor(block);
+        updatePosition();
     }
 
     public boolean isVisible(int x, int y, int z) {

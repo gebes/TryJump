@@ -14,8 +14,8 @@ public class SettingsPane {
     private JButton backButton = new JButton("BACK");
     private final JComboBox res = nodes.resolution(Integer.parseInt(settings[0]));
     private final JComboBox fullscreen = nodes.fullscreen(Boolean.parseBoolean(settings[4]));
-    private  final JSlider musicVolume = new JSlider(SwingConstants.HORIZONTAL, 0, 100, Integer.parseInt(settings[3]));
-    private  final JSlider FOV = new JSlider(SwingConstants.HORIZONTAL, 20, 130, Integer.parseInt(settings[2]) );
+    private final JSlider musicVolume = new JSlider(SwingConstants.HORIZONTAL, 0, 100, Integer.parseInt(settings[3]));
+    private final JSlider FOV = new JSlider(SwingConstants.HORIZONTAL, 20, 130, Integer.parseInt(settings[2]) );
     private int width = Integer.parseInt(settings[0]);
     private int height = Integer.parseInt(settings[1]);
     private int fov = Integer.parseInt(settings[2]);

@@ -345,7 +345,6 @@ public class CameraController extends FirstPersonCameraController {
         if (keycode == Input.Keys.ESCAPE) {
             stopGame();
         }
-
         if (keycode == Input.Keys.NUM_1) {
             selectedBlock = Block.Type.Dirt;
         }
@@ -361,17 +360,36 @@ public class CameraController extends FirstPersonCameraController {
         if (keycode == Input.Keys.NUM_5) {
             selectedBlock = Block.Type.Leaves;
         }
+        if (keycode == Input.Keys.NUM_6) {
+            selectedBlock = Block.Type.Brick;
+        }
+        if (keycode == Input.Keys.NUM_7) {
+            selectedBlock = Block.Type.Gold;
+        }
         if (keycode == Input.Keys.NUM_0) {
             selectedBlock = Block.Type.Bedrock;
+        }
+        if(keycode == Input.Keys.ALT_RIGHT){
+            if(Variables.create){
+                Vector3 position=getCameraWorldPosition();
+                grid.setBlock((int)position.x,(int)position.y-2,(int)position.z,Block.Type.Diamond);
+                Variables.endX = (int)position.x;
+                Variables.endY = (int)position.y;
+                Variables.endZ = (int)position.z;
+                stopGame();
+            }
         }
         return false;
     }
 
     private void stopGame(){
+        if(Variables.create){
+            worldLoadManager.saveMap(Grid.blocks);
+            MapManagment.save();
+        }
         Gdx.app.exit();
     }
     private void wonGame(){
-        //worldLoadManager.saveMap(Grid.blocks);
         stopWatch.stop();
         Variables.time = (int) stopWatch.getElapsedTimeSecs();
         MapManagment.save();

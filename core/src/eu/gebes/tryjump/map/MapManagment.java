@@ -25,6 +25,10 @@ public class MapManagment {
                 outputWriter.write(maps[i]);
                 outputWriter.newLine();
             }
+            if(Variables.create){
+                outputWriter.write(Variables.mapName+":"+"10000");
+                outputWriter.newLine();
+            }
 
             outputWriter.flush();
             outputWriter.close();

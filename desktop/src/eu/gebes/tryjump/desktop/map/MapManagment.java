@@ -40,7 +40,7 @@ public class MapManagment {
             }
             in.close();
         } catch (FileNotFoundException e) {
-            FILE_DIRECTORY.mkdirs();
+            new File( home + "\\AppData\\Roaming\\.tryjump\\maps\\").mkdirs();
             List<String> lines = Arrays.asList("Jump1:10000", "Jump2:10000", "Jump3:10000");
             Files.write(Paths.get(String.valueOf(FILE_NAME)),
                     lines
@@ -52,28 +52,6 @@ public class MapManagment {
             throw new RuntimeException("Error initializing stream", e);
         }
 
-        return maps;
-    }
-
-    public synchronized void save(String[] settings) {
-        try {
-            BufferedWriter outputWriter = null;
-            outputWriter = new BufferedWriter(new FileWriter(FILE_NAME));
-            for(int i=0;i<settings.length;i++){
-                outputWriter.write(settings[i]);
-                outputWriter.newLine();
-            }
-
-            outputWriter.flush();
-            outputWriter.close();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException("File not found", e);
-        } catch (IOException e) {
-            throw new RuntimeException("Error initializing stream", e);
-        }
-    }
-
-    public String[] getSettings() {
         return maps;
     }
 }
