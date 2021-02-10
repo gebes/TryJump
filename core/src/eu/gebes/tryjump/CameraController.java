@@ -31,7 +31,7 @@ public class CameraController extends FirstPersonCameraController {
         stopWatch.start();
         if(!(Variables.create)){
             gravity = 9.81f;
-            movementSpeed = 16f;
+            movementSpeed = 18;
         }else{
             gravity = 2;
             movementSpeed = 10f;
@@ -91,7 +91,7 @@ public class CameraController extends FirstPersonCameraController {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && canJump && floorDistance < 0.5) {
             if(!(Variables.create)){
                 canJump = false;
-                newVel.y = 2;
+                newVel.y = 1.14f;
             }else{
                 canJump = true;
                 newVel.y = 0.2f;
@@ -327,7 +327,7 @@ public class CameraController extends FirstPersonCameraController {
         Vector3 p = camera.position.cpy();
         p.scl(1f / Variables.blockSize);
         p.add(0.5f);
-        if(((int)p.x)==Variables.endX&&((int)p.y)==Variables.endY&&((int)p.z)==Variables.endZ){wonGame();}
+        if(((int)p.x)==Variables.endX&&((int)p.y)==Variables.endY&&((int)p.z)==Variables.endZ){stopGame((byte)2);}
         if(p.y<3&&!Variables.create){ fallDown(); }
         return p;
     }
@@ -343,7 +343,7 @@ public class CameraController extends FirstPersonCameraController {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE) {
-            stopGame();
+            stopGame((byte)3);
         }
         if (keycode == Input.Keys.NUM_1) {
             selectedBlock = Block.Type.Dirt;
@@ -376,23 +376,23 @@ public class CameraController extends FirstPersonCameraController {
                 Variables.endX = (int)position.x;
                 Variables.endY = (int)position.y;
                 Variables.endZ = (int)position.z;
-                stopGame();
+                stopGame((byte) 1);
             }
         }
         return false;
     }
 
-    private void stopGame(){
-        if(Variables.create){
+    private void stopGame(byte ID){
+        if(ID==1){
             worldLoadManager.saveMap(Grid.blocks);
             MapManagment.save();
+        }else if(ID==2){
+            stopWatch.stop();
+            Variables.time = (int) stopWatch.getElapsedTimeSecs();
+            MapManagment.save();
+            Gdx.app.exit();
         }
-        Gdx.app.exit();
-    }
-    private void wonGame(){
-        stopWatch.stop();
-        Variables.time = (int) stopWatch.getElapsedTimeSecs();
-        MapManagment.save();
+        //worldLoadManager.saveMap(Grid.blocks);
         Gdx.app.exit();
     }
 
