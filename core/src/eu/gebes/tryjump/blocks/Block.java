@@ -67,7 +67,7 @@ public class Block implements Disposable {
     public enum Type {
 
 
-        Dirt, Stone, Planks, Log, Leaves, Bedrock,Diamond,Brick,Gold;
+        Dirt, Stone, Planks, Log, Leaves, Bedrock,Diamond,Brick,Gold,CleanStone,Grass;
 
         public Integer getId() {
             return Arrays.asList(values()).indexOf(this);

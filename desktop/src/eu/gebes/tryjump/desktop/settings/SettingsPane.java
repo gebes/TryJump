@@ -9,18 +9,18 @@ import java.awt.*;
 
 public class SettingsPane {
     private SettingsNodes nodes = new SettingsNodes();
-    private final SettingsSave save = new SettingsSave();
-    private String[] settings = save.load();
+    private static final SettingsSave save = new SettingsSave();
+    private static String[] settings = save.load();
     private JButton backButton = new JButton("BACK");
     private final JComboBox res = nodes.resolution(Integer.parseInt(settings[0]));
     private final JComboBox fullscreen = nodes.fullscreen(Boolean.parseBoolean(settings[4]));
     private final JSlider musicVolume = new JSlider(SwingConstants.HORIZONTAL, 0, 100, Integer.parseInt(settings[3]));
     private final JSlider FOV = new JSlider(SwingConstants.HORIZONTAL, 20, 130, Integer.parseInt(settings[2]) );
-    private int width = Integer.parseInt(settings[0]);
-    private int height = Integer.parseInt(settings[1]);
-    private int fov = Integer.parseInt(settings[2]);
-    private int volume = Integer.parseInt(settings[3]);
-    private boolean fullscreenBool = Boolean.parseBoolean(settings[4]);
+    private static int width = Integer.parseInt(settings[0]);
+    private static int height = Integer.parseInt(settings[1]);
+    private static int fov = Integer.parseInt(settings[2]);
+    private static int volume = Integer.parseInt(settings[3]);
+    private static boolean fullscreenBool = Boolean.parseBoolean(settings[4]);
 
     public JPanel panel(){
         JPanel panel = new JPanel();
@@ -58,7 +58,6 @@ public class SettingsPane {
                 fov = FOV.getValue();
                 volume = musicVolume.getValue();
                 save.save(new String[]{String.valueOf(width), String.valueOf(height),String.valueOf(fov),String.valueOf(volume), String.valueOf(fullscreenBool)});
-
             }
 
         });

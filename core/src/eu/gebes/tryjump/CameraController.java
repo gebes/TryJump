@@ -23,6 +23,7 @@ public class CameraController extends FirstPersonCameraController {
     final Grid grid;
     StopWatch stopWatch = new StopWatch();
     MapManagment mapManagment =new MapManagment();
+    WorldLoadManager worldLoadManager = new WorldLoadManager();
 
     public CameraController(Camera camera, Grid grid) {
         super(camera);
@@ -272,7 +273,12 @@ public class CameraController extends FirstPersonCameraController {
             }
         }
 
-
+        if(((int)player.x)==Variables.endX&&((int)player.y)==Variables.endY&&((int)player.z)==Variables.endZ){
+            stopGame(2);
+        }
+        if(player.y<3&&!Variables.create){
+            fallDown();
+        }
         if (translation.x >= 0) {
             if (translation.x > distanceX)
                 translation.x = distanceX - extension;
@@ -327,8 +333,6 @@ public class CameraController extends FirstPersonCameraController {
         Vector3 p = camera.position.cpy();
         p.scl(1f / Variables.blockSize);
         p.add(0.5f);
-        if(((int)p.x)==Variables.endX&&((int)p.y)==Variables.endY&&((int)p.z)==Variables.endZ){stopGame((byte)2);}
-        if(p.y<3&&!Variables.create){ fallDown(); }
         return p;
     }
 
@@ -338,18 +342,16 @@ public class CameraController extends FirstPersonCameraController {
         return super.mouseMoved(screenX, screenY);
     }
 
-    WorldLoadManager worldLoadManager = new WorldLoadManager();
-
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Input.Keys.ESCAPE) {
-            stopGame((byte)3);
+            stopGame(3);
         }
         if (keycode == Input.Keys.NUM_1) {
             selectedBlock = Block.Type.Dirt;
         }
         if (keycode == Input.Keys.NUM_2) {
-            selectedBlock = Block.Type.Stone;
+            selectedBlock = Block.Type.Grass;
         }
         if (keycode == Input.Keys.NUM_3) {
             selectedBlock = Block.Type.Log;
@@ -358,12 +360,18 @@ public class CameraController extends FirstPersonCameraController {
             selectedBlock = Block.Type.Planks;
         }
         if (keycode == Input.Keys.NUM_5) {
-            selectedBlock = Block.Type.Leaves;
+            selectedBlock = Block.Type.Stone;
         }
         if (keycode == Input.Keys.NUM_6) {
-            selectedBlock = Block.Type.Brick;
+            selectedBlock = Block.Type.CleanStone;
         }
         if (keycode == Input.Keys.NUM_7) {
+            selectedBlock = Block.Type.Brick;
+        }
+        if (keycode == Input.Keys.NUM_8) {
+            selectedBlock = Block.Type.Leaves;
+        }
+        if (keycode == Input.Keys.NUM_9) {
             selectedBlock = Block.Type.Gold;
         }
         if (keycode == Input.Keys.NUM_0) {
@@ -376,13 +384,13 @@ public class CameraController extends FirstPersonCameraController {
                 Variables.endX = (int)position.x;
                 Variables.endY = (int)position.y;
                 Variables.endZ = (int)position.z;
-                stopGame((byte) 1);
+                stopGame( 1);
             }
         }
         return false;
     }
 
-    private void stopGame(byte ID){
+    private void stopGame(int ID){
         if(ID==1){
             worldLoadManager.saveMap(Grid.blocks);
             MapManagment.save();
@@ -392,7 +400,6 @@ public class CameraController extends FirstPersonCameraController {
             MapManagment.save();
             Gdx.app.exit();
         }
-        //worldLoadManager.saveMap(Grid.blocks);
         Gdx.app.exit();
     }
 

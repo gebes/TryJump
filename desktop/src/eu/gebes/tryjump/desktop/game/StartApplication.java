@@ -13,6 +13,7 @@ public class StartApplication {
         config.height = height;
         config.foregroundFPS = 144;
         config.fullscreen = fullscreen;
+        config.vSyncEnabled=false;
         Variables.FOV = fov;
         Variables.musicVolume = musicVolume;
         System.out.println(Variables.mapName);

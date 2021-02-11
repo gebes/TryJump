@@ -54,8 +54,6 @@ public class TryJump extends ApplicationAdapter {
         Gdx.input.setCursorCatched(true);
 
         crosshair = new Texture(Gdx.files.internal("gui/crosshair.png"));
-
-
     }
 
 
