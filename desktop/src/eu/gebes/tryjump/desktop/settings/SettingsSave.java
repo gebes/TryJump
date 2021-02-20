@@ -14,12 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@FieldDefaults(level = AccessLevel.PUBLIC)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SettingsSave {
-    private final String[] settings = new String[6];
-    private static final String home = System.getProperty("user.home");
-    private static final File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
-    private static final File FILE_NAME = new File(FILE_DIRECTORY + "\\settings.txt");
+    String[] settings = new String[6];
+    static String home = System.getProperty("user.home");
+    static File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
+    static File FILE_NAME = new File(FILE_DIRECTORY + "\\settings.txt");
 
     @SneakyThrows
     @PostConstruct

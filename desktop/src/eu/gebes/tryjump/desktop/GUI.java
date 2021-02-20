@@ -2,15 +2,20 @@ package eu.gebes.tryjump.desktop;
 
 import eu.gebes.tryjump.desktop.map.MapPane;
 import eu.gebes.tryjump.desktop.settings.SettingsPane;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 
 import javax.swing.*;
 import java.awt.*;
 
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class GUI {
-    private final MapPane mapPane = new MapPane();
-    private final StartGUI startGuiClass = new StartGUI();
-    private static final JFrame frame = new JFrame();
-    private final SettingsPane settingsPaneClass = new SettingsPane();
+    MapPane mapPane = new MapPane();
+    StartGUI startGuiClass = new StartGUI();
+    @Getter
+    static JFrame frame = new JFrame();
+    SettingsPane settingsPaneClass = new SettingsPane();
 
     public void initComponents() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -57,9 +62,5 @@ public class GUI {
         int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
         int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
         frame.setLocation(x, y);
-    }
-
-    public static JFrame getFrame() {
-        return frame;
     }
 }

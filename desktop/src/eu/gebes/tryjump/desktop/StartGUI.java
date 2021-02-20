@@ -1,11 +1,15 @@
 package eu.gebes.tryjump.desktop;
 
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
+
 import javax.swing.*;
 import java.awt.*;
 
+@FieldDefaults(level =  AccessLevel.PRIVATE)
 public class StartGUI {
-    private JButton startButton = new JButton("SETTINGS");
-    private JButton settingsButton = new JButton("START");
+    JButton startButton = new JButton("SETTINGS");
+    JButton settingsButton = new JButton("START");
 
     public JPanel main(){
         JPanel panel = new JPanel();
@@ -31,7 +35,6 @@ public class StartGUI {
     public JButton settingsButton(){
         settingsButton.setSize(300,100);
         settingsButton.setPreferredSize(new Dimension(300, 70));
-
 
         return settingsButton;
     }

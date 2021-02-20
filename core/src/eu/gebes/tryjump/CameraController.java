@@ -25,6 +25,12 @@ public class CameraController extends FirstPersonCameraController {
     MapManagment mapManagment =new MapManagment();
     WorldLoadManager worldLoadManager = new WorldLoadManager();
 
+    Vector3 velocity = Vector3.Zero;
+    float gravity;
+    float movementSpeed;
+    boolean canJump = false;
+    float floorDistance = 1000;
+
     public CameraController(Camera camera, Grid grid) {
         super(camera);
         this.camera = camera;
@@ -52,18 +58,11 @@ public class CameraController extends FirstPersonCameraController {
         return super.touchDown(screenX, screenY, pointer, button);
     }
 
-    Vector3 velocity = Vector3.Zero;
-    float gravity;
-    float movementSpeed;
-    boolean canJump = false;
-    float floorDistance = 1000;
-
     @Override
     public void update() {
         float dt = Gdx.graphics.getDeltaTime();
 
         velocity.scl(0.9f * dt, 1, 0.9f * dt);
-
 
         Vector3 camDir = camera.direction.cpy();
         camDir.y = 0;
@@ -91,13 +90,14 @@ public class CameraController extends FirstPersonCameraController {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && canJump && floorDistance < 0.5) {
             if(!(Variables.create)){
-                canJump = false;
-                newVel.y = 1.14f;
+                if(proofJump(getCameraWorldPosition())){
+                    canJump = false;
+                    newVel.y = 1.14f;
+                }
             }else{
                 canJump = true;
                 newVel.y = 0.2f;
             }
-
         }
 
         newVel.sub(0, (gravity/2)* dt, 0);
@@ -390,22 +390,47 @@ public class CameraController extends FirstPersonCameraController {
         return false;
     }
 
-    private void stopGame(int ID){
+    void stopGame(int ID){
         if(ID==1){
             worldLoadManager.saveMap(Grid.blocks);
-            MapManagment.save();
+            mapManagment.save();
         }else if(ID==2){
             stopWatch.stop();
             Variables.time = (int) stopWatch.getElapsedTimeSecs();
-            MapManagment.save();
+            mapManagment.save();
             Gdx.app.exit();
         }
         Gdx.app.exit();
     }
 
-    private void fallDown(){
+    void fallDown(){
         stopWatch.stop();
         stopWatch.start();
         camera.position.set(0,100,130);
+    }
+
+    boolean proofJump(Vector3 position){
+        if(grid.hasBlock((int)position.x,(int)position.y-2,(int)position.z)){
+            return true;
+        }else if(grid.hasBlock((int)(position.x),(int)position.y-2,round(position.z))){
+            return  true;
+        }else if(grid.hasBlock(round(position.x),(int)position.y-2,(int)(position.z))){
+            return  true;
+        }else if(grid.hasBlock(round(position.x),(int)position.y-2,round(position.z))){
+            return  true;
+        }
+        return false;
+    }
+
+    int round(float coordinate){
+        float tmp = coordinate%1;
+        double difference = 0.70;
+
+        if(tmp<=difference){
+            return (int)(coordinate-1);
+        }else if(tmp>=(-difference)){
+            return (int)(coordinate+1);
+        }
+        return (int) coordinate;
     }
 }

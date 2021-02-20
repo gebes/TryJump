@@ -14,12 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 
 
-@FieldDefaults(level = AccessLevel.PUBLIC)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MapManagment {
-    private String[] maps;
-    private final String home = System.getProperty("user.home");
-    private final File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
-    private final File FILE_NAME = new File(FILE_DIRECTORY + "\\maps.txt");
+    String[] maps;
+    final String home = System.getProperty("user.home");
+    final File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
+    final File FILE_NAME = new File(FILE_DIRECTORY + "\\maps.txt");
 
     @SneakyThrows
     @PostConstruct

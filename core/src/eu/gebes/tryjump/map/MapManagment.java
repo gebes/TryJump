@@ -6,12 +6,12 @@ import java.io.*;
 
 
 public class MapManagment {
-    private static String[] maps = Variables.maps;
-    private static final String home = System.getProperty("user.home");
-    private static final File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
-    private static final File FILE_NAME = new File(FILE_DIRECTORY + "\\maps.txt");
+    private String[] maps = Variables.maps;
+    private final String home = System.getProperty("user.home");
+    private final File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
+    private final File FILE_NAME = new File(FILE_DIRECTORY + "\\maps.txt");
 
-    public static synchronized void save() {
+    public  synchronized void save() {
         try {
             BufferedWriter outputWriter = null;
             outputWriter = new BufferedWriter(new FileWriter(FILE_NAME));

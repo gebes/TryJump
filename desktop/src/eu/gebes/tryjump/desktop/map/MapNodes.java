@@ -4,26 +4,27 @@ import eu.gebes.tryjump.Variables;
 import eu.gebes.tryjump.desktop.GUI;
 import eu.gebes.tryjump.desktop.game.StartApplication;
 import eu.gebes.tryjump.desktop.settings.SettingsPane;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class MapNodes {
-    private final StartApplication startApplication = new StartApplication();
-    private final SettingsPane settingsPaneClass = new SettingsPane();
-    private final MapManagment mapManagment = new MapManagment();
-    private String[] maps = mapManagment.load();
-    private String createName = new String();
+    final StartApplication startApplication = new StartApplication();
+    final SettingsPane settingsPaneClass = new SettingsPane();
+    final MapManagment mapManagment = new MapManagment();
+    String[] maps = mapManagment.load();
+    String createName = new String();
 
     public JList selector(){
         DefaultListModel listModel = new DefaultListModel();
         String[] both;
-        String tmpName = null;
         for (int i=0;i<maps.length;i++){
             both = maps[i].split(":");
-            tmpName = both[0];
             String tmp;
             if(both[1].equals("10000")){
                 tmp = both[0];
@@ -32,9 +33,6 @@ public class MapNodes {
             }
             listModel.add(i,tmp);
         }
-
-        final String name =tmpName;
-
         final JList mapList = new JList(listModel);
         mapList.setFont(new java.awt.Font("Tahoma", 1, 28));
 
