@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,7 +22,7 @@ public class TryJump extends ApplicationAdapter {
     SpriteBatch spriteBatch;
     Texture crosshair;
     ModelBatch modelBatch;
-    CameraController cameraController;
+    PlayerController cameraController;
     Grid grid;
 
 
@@ -46,7 +45,7 @@ public class TryJump extends ApplicationAdapter {
 
         camera.near = Variables.cameraNear;
         camera.far = Variables.cameraFar;
-        cameraController = new CameraController(camera, grid);
+        cameraController = new PlayerController(camera, grid);
         cameraController.setDegreesPerPixel(Variables.cameraDegreesPerPixel);
         cameraController.setVelocity(Variables.cameraVelocity);
 

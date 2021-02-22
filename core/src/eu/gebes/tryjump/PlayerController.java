@@ -12,7 +12,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CameraController extends FirstPersonCameraController {
+public class PlayerController extends FirstPersonCameraController {
 
     Block.Type selectedBlock = Block.Type.Stone;
     Camera camera;
@@ -22,7 +22,7 @@ public class CameraController extends FirstPersonCameraController {
     Player player;
     WorldLoadManager worldLoadManager = new WorldLoadManager();
 
-    public CameraController(Camera camera, Grid grid) {
+    public PlayerController(Camera camera, Grid grid) {
         super(camera);
         this.camera = camera;
         this.grid = grid;
