@@ -5,44 +5,29 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.BoundingBox;
 import eu.gebes.tryjump.blocks.Block;
 import eu.gebes.tryjump.map.MapManagment;
 import eu.gebes.tryjump.map.WorldLoadManager;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
-import java.util.LinkedList;
-import java.util.List;
-
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CameraController extends FirstPersonCameraController {
 
     Block.Type selectedBlock = Block.Type.Stone;
-    final Camera camera;
-    final Grid grid;
+    Camera camera;
+    Grid grid  = null;
     StopWatch stopWatch = new StopWatch();
     MapManagment mapManagment =new MapManagment();
+    Player player;
     WorldLoadManager worldLoadManager = new WorldLoadManager();
-
-    Vector3 velocity = Vector3.Zero;
-    float gravity;
-    float movementSpeed;
-    boolean canJump = false;
-    float floorDistance = 1000;
 
     public CameraController(Camera camera, Grid grid) {
         super(camera);
         this.camera = camera;
         this.grid = grid;
         stopWatch.start();
-        if(!(Variables.create)){
-            gravity = 9.81f;
-            movementSpeed = 18;
-        }else{
-            gravity = 2;
-            movementSpeed = 10f;
-        }
+        player = new Player(grid, camera, stopWatch);
     }
 
     @Override
@@ -62,7 +47,7 @@ public class CameraController extends FirstPersonCameraController {
     public void update() {
         float dt = Gdx.graphics.getDeltaTime();
 
-        velocity.scl(0.9f * dt, 1, 0.9f * dt);
+        player.getVelocity().scl(0.9f * dt, 1, 0.9f * dt);
 
         Vector3 camDir = camera.direction.cpy();
         camDir.y = 0;
@@ -70,12 +55,12 @@ public class CameraController extends FirstPersonCameraController {
 
         Vector3 camRight = new Vector3(camDir.z, 0f, -camDir.x);
 
-        float val = movementSpeed * dt;
+        float val = player.getMovementSpeed() * dt;
 
         float v = val;
         if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
             v *= 1.98123;
-        Vector3 newVel = new Vector3(velocity);
+        Vector3 newVel = new Vector3(player.getVelocity());
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             newVel.add(camDir.scl(v));
         }
@@ -88,23 +73,23 @@ public class CameraController extends FirstPersonCameraController {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             newVel.sub(camRight.scl(v));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && canJump && floorDistance < 0.5) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) & player.isCanJump() && player.getFloorDistance() < 0.5) {
             if(!(Variables.create)){
                 if(proofJump(getCameraWorldPosition())){
-                    canJump = false;
+                    player.setCanJump(false);
                     newVel.y = 1.14f;
                 }
             }else{
-                canJump = true;
+                player.setCanJump(true);
                 newVel.y = 0.2f;
             }
         }
 
-        newVel.sub(0, (gravity/2)* dt, 0);
+        newVel.sub(0, (player.getGravity()/2)* dt, 0);
 
-        velocity = newVel;
+        player.setVelocity(newVel);
 
-        Vector3 t = moveBy(velocity);
+        Vector3 t = player.moveBy(player.getVelocity(), getCameraWorldPosition());
         camera.position.add(
                 t
         );
@@ -113,8 +98,8 @@ public class CameraController extends FirstPersonCameraController {
             camera.position.x = 0;
         if (camera.position.y < Variables.blockSize) {
             camera.position.y = Variables.blockSize;
-            if(velocity.y <= 0){
-                velocity.y = 0;
+            if(player.getVelocity().y <= 0){
+                player.getVelocity().y = 0;
             }
         }
         if (camera.position.z < 0)
@@ -124,7 +109,7 @@ public class CameraController extends FirstPersonCameraController {
             camera.position.x = Variables.gridWidth * Variables.blockSize - Variables.blockSize;
         if (camera.position.y > Variables.gridHeight * Variables.blockSize - Variables.blockSize) {
             camera.position.y = Variables.gridHeight * Variables.blockSize - Variables.blockSize;
-            velocity.y = 0;
+            player.getVelocity().y = 0;
         }
         if (camera.position.z > Variables.gridDepth * Variables.blockSize - Variables.blockSize)
             camera.position.z = Variables.gridDepth * Variables.blockSize - Variables.blockSize;
@@ -133,208 +118,8 @@ public class CameraController extends FirstPersonCameraController {
         super.update();
     }
 
-    public Vector3 moveBy(Vector3 translation) {
-
-        int length = 9;
-        int h = length / 2;
-
-        float width = 0.4f;
-        float extension = 0.01f;
 
 
-        Vector3 player = getCameraWorldPosition();
-
-        Vector3 playerA = new Vector3(player.x - width, player.y - 1.4f, player.z - width);
-        Vector3 playerB = new Vector3(player.x + width, player.y + 0.4f, player.z + width);
-
-
-        BoundingBox playerBoxX = new BoundingBox(
-                new Vector3(Float.MIN_VALUE, playerA.y, playerA.z - extension),
-                new Vector3(Float.MAX_VALUE, playerB.y, playerB.z + extension)
-        );
-
-        BoundingBox playerBoxY = new BoundingBox(
-                new Vector3(playerA.x - extension, Float.MIN_VALUE, playerA.z - extension),
-                new Vector3(playerB.x + extension, Float.MAX_VALUE, playerB.z + extension)
-        );
-
-        BoundingBox playerBoxZ = new BoundingBox(
-                new Vector3(playerA.x - extension, playerA.y, Float.MIN_VALUE),
-                new Vector3(playerB.x + extension, playerB.y, Float.MAX_VALUE)
-        );
-
-        float distanceX = Float.MAX_VALUE;
-        float distanceY = Float.MAX_VALUE;
-        float distanceZ = Float.MAX_VALUE;
-
-        List<BoundingBox> blocks = new LinkedList<>();
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
-                for (int k = 0; k < length; k++) {
-                    int x = (int) (player.x - h + i);
-                    int y = (int) (player.y - h + j);
-                    int z = (int) (player.z - h + k);
-
-
-                    Block block = grid.getBlock(x, y, z);
-
-                    if (block == null) continue;
-                    Vector3 cubeA = new Vector3(x, y, z);
-                    Vector3 cubeB = new Vector3(x + 1, y + 1, z + 1);
-                    BoundingBox cubeBox = new BoundingBox(cubeA, cubeB);
-                    blocks.add(cubeBox);
-
-                    if (cubeBox.intersects(playerBoxX)) {
-
-                        if (translation.x < 0) {
-                            float edgeBlock = cubeB.x;
-                            float edgePlayer = playerA.x;
-
-                            if (edgeBlock <= edgePlayer) {
-                                float dis = edgePlayer - edgeBlock;
-
-                                if (dis < distanceX)
-                                    distanceX = dis;
-                            }
-
-                        } else {
-
-
-                            float edgeBlock = cubeA.x;
-                            float edgePlayer = playerB.x;
-
-
-                            if (edgeBlock >= edgePlayer) {
-                                float dis = edgeBlock - edgePlayer;
-
-                                if (dis < distanceX)
-                                    distanceX = dis;
-                            }
-
-
-                        }
-
-                    } else if (cubeBox.intersects(playerBoxY)) {
-                        if (translation.y < 0) {
-                            float edgeBlock = cubeB.y;
-                            float edgePlayer = playerA.y;
-
-                            if (edgeBlock <= edgePlayer) {
-                                float dis = edgePlayer - edgeBlock;
-
-                                if (dis < distanceY)
-                                    distanceY = dis;
-                            }
-
-                        } else {
-
-                            float edgeBlock = cubeA.y;
-                            float edgePlayer = playerB.y;
-
-
-                            if (edgeBlock >= edgePlayer) {
-                                float dis = edgeBlock - edgePlayer;
-
-                                if (dis < distanceY)
-                                    distanceY = dis;
-                            }
-
-                        }
-
-                    } else if (cubeBox.intersects(playerBoxZ)) {
-                        if (translation.z < 0) {
-                            float edgeBlock = cubeB.z;
-                            float edgePlayer = playerA.z;
-
-                            if (edgeBlock <= edgePlayer) {
-                                float dis = edgePlayer - edgeBlock;
-
-                                if (dis < distanceZ)
-                                    distanceZ = dis;
-                            }
-
-                        } else {
-
-                            float edgeBlock = cubeA.z;
-                            float edgePlayer = playerB.z;
-
-
-                            if (edgeBlock >= edgePlayer) {
-                                float dis = edgeBlock - edgePlayer;
-
-                                if (dis < distanceZ)
-                                    distanceZ = dis;
-                            }
-
-                        }
-                    }
-
-                }
-            }
-        }
-
-        if(((int)player.x)==Variables.endX&&((int)player.y)==Variables.endY&&((int)player.z)==Variables.endZ){
-            stopGame(2);
-        }
-        if(player.y<3&&!Variables.create){
-            fallDown();
-        }
-        if (translation.x >= 0) {
-            if (translation.x > distanceX)
-                translation.x = distanceX - extension;
-        } else {
-            if (translation.x < -distanceX)
-                translation.x = -distanceX + extension;
-        }
-
-        if (translation.y >= 0) {
-            if (translation.y > distanceY) {
-                velocity.y = distanceY - extension;
-                //velocity.y = 0;
-            }
-        } else {
-            if (translation.y < -distanceY) {
-                velocity.y = -distanceY + extension;
-                //velocity.y = 0;
-                floorDistance = distanceY;
-                canJump = true;
-            }
-        }
-
-
-        if (translation.z >= 0) {
-            if (translation.z > distanceZ)
-                translation.z = distanceZ - extension;
-        } else {
-            if (translation.z < -distanceZ)
-                translation.z = -distanceZ + extension;
-        }
-
-        Vector3 testA = playerA.cpy().add(translation);
-        Vector3 testB = playerB.cpy().add(translation);
-        BoundingBox testBox = new BoundingBox(
-                testA,
-                testB
-        );
-
-        for (BoundingBox block : blocks) {
-            if (block.intersects(testBox)) {
-                translation = Vector3.Zero;
-                break;
-            }
-        }
-
-        player.scl(Variables.blockSize);
-
-        return translation;
-    }
-
-    public Vector3 getCameraWorldPosition() {
-        Vector3 p = camera.position.cpy();
-        p.scl(1f / Variables.blockSize);
-        p.add(0.5f);
-        return p;
-    }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
@@ -389,24 +174,20 @@ public class CameraController extends FirstPersonCameraController {
         }
         return false;
     }
+    public Vector3 getCameraWorldPosition() {
+        Vector3 p = camera.position.cpy();
+        p.scl(1f / Variables.blockSize);
+        p.add(0.5f);
+        return p;
+    }
 
     void stopGame(int ID){
         if(ID==1){
             worldLoadManager.saveMap(Grid.blocks);
             mapManagment.save();
-        }else if(ID==2){
-            stopWatch.stop();
-            Variables.time = (int) stopWatch.getElapsedTimeSecs();
-            mapManagment.save();
-            Gdx.app.exit();
         }
-        Gdx.app.exit();
-    }
 
-    void fallDown(){
-        stopWatch.stop();
-        stopWatch.start();
-        camera.position.set(0,100,130);
+        Gdx.app.exit();
     }
 
     boolean proofJump(Vector3 position){
