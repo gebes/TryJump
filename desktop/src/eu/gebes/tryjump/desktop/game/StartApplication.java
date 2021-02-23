@@ -1,5 +1,6 @@
 package eu.gebes.tryjump.desktop.game;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import eu.gebes.tryjump.TryJump;
@@ -14,6 +15,7 @@ public class StartApplication {
         config.foregroundFPS = 144;
         config.fullscreen = fullscreen;
         config.vSyncEnabled=false;
+        config.addIcon("icon.png", Files.FileType.Internal);
         Variables.FOV = fov;
         Variables.musicVolume = musicVolume;
         System.out.println(Variables.mapName);

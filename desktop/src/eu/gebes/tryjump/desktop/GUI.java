@@ -18,6 +18,7 @@ public class GUI {
     SettingsPane settingsPaneClass = new SettingsPane();
 
     public void initComponents() {
+        frame.setIconImage(new ImageIcon("icon.png").getImage());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(330,300);
         final JPanel  panel = startGuiClass.main();
