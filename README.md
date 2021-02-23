@@ -37,3 +37,10 @@ Java SDK 8 at least and a good enough PC
 - How to calculate Vectors
 - Game Development
 - Working as a Solo team
+
+## Screenshots
+
+| big maps                             | simple maps                          |
+| ------------------------------------ | ------------------------------------ |
+|![](https://data.zgast.at/TryJump/1ss.PNG)|![](https://data.zgast.at/TryJump/2ss.PNG)|
+
