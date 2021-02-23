@@ -17,9 +17,6 @@
 
 Source code for TryJump, a school Project.
 
-## The Project📃
-You can find our project [here](https://medibot.at), where you can try out all the features.
-
 ## Features💻
 - Minecraft look
 - Jump n Run mechanics
