@@ -2,7 +2,7 @@
 <p align="center">
 <img width="231" height="231" alt="TryJump" src="https://raw.githubusercontent.com/Gebes/TryJump/main/assets/icon.png?token=AIMZT2SZR2KIOSNOYGCWFFLAHVELA"/>
 </p>
-<h1 align="center">Tryjump</h1>
+<h1 align="center">TryJump</h1>
 
 
 
