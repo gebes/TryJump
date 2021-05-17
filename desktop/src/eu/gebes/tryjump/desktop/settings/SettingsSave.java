@@ -1,5 +1,6 @@
 package eu.gebes.tryjump.desktop.settings;
 
+import eu.gebes.tryjump.desktop.FileLocations;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
@@ -17,16 +18,13 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SettingsSave {
     String[] settings = new String[6];
-    static String home = System.getProperty("user.home");
-    static File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
-    static File FILE_NAME = new File(FILE_DIRECTORY + "\\settings.txt");
 
     @SneakyThrows
     @PostConstruct
     public String[] load() {
 
         try {
-            BufferedReader in  = new BufferedReader(new FileReader(FILE_NAME));
+            BufferedReader in  = new BufferedReader(new FileReader(FileLocations.SETTINGS_FILE));
 
             int count=0;
             while ((settings[count] = in.readLine()) != null) {
@@ -34,9 +32,9 @@ public class SettingsSave {
             }
             in.close();
         } catch (FileNotFoundException e) {
-            FILE_DIRECTORY.mkdirs();
+            FileLocations.GAME_HOME_FOLDER.mkdirs();
             List<String> lines = Arrays.asList("1920", "1080", "70", "0", "false");
-            Files.write(Paths.get(String.valueOf(FILE_NAME)),
+            Files.write(Paths.get(String.valueOf(FileLocations.SETTINGS_FILE)),
                     lines
                     ,StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE,
@@ -52,7 +50,7 @@ public class SettingsSave {
     public synchronized void save(String[] settings) {
         try {
             BufferedWriter outputWriter = null;
-            outputWriter = new BufferedWriter(new FileWriter(FILE_NAME));
+            outputWriter = new BufferedWriter(new FileWriter(FileLocations.SETTINGS_FILE));
             for(int i=0;i<settings.length;i++){
                 outputWriter.write(settings[i]);
                 outputWriter.newLine();
