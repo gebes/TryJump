@@ -9,7 +9,6 @@ public class FileLocations {
 
 
     static {
-        JOptionPane.showMessageDialog(null, System.getProperty("os.name"));
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             GAME_HOME_FOLDER = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\.tryjump\\");
         } else {

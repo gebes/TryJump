@@ -16,9 +16,9 @@ public class PlayerController extends FirstPersonCameraController {
 
     Block.Type selectedBlock = Block.Type.Stone;
     Camera camera;
-    Grid grid  = null;
+    Grid grid = null;
     StopWatch stopWatch = new StopWatch();
-    MapManagment mapManagment =new MapManagment();
+    MapManagment mapManagment = new MapManagment();
     Player player;
     WorldLoadManager worldLoadManager = new WorldLoadManager();
 
@@ -32,7 +32,7 @@ public class PlayerController extends FirstPersonCameraController {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(Variables.create){
+        if (Variables.create) {
             if (button == 0) {
                 grid.editBoxByRayCast(camera.position, camera.direction, null);
             } else if (button == 1) {
@@ -58,7 +58,7 @@ public class PlayerController extends FirstPersonCameraController {
         float val = player.getMovementSpeed() * dt;
 
         float v = val;
-        if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
+        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
             v *= 1.98123;
         Vector3 newVel = new Vector3(player.getVelocity());
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -73,19 +73,28 @@ public class PlayerController extends FirstPersonCameraController {
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             newVel.sub(camRight.scl(v));
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE) & player.isCanJump() && player.getFloorDistance() < 0.5) {
-            if(!(Variables.create)){
-                if(proofJump(getCameraWorldPosition())){
+        if (Variables.create) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                newVel.y = 0.1f;
+            } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                newVel.y = -0.1f;
+            }else{
+                newVel.y = 0;
+            }
+        } else if (Gdx.input.isKeyPressed(Input.Keys.SPACE) & player.isCanJump() && player.getFloorDistance() < 0.5) {
+            if (!(Variables.create)) {
+                if (proofJump(getCameraWorldPosition())) {
                     player.setCanJump(false);
                     newVel.y = 1.14f;
                 }
-            }else{
+            } else {
                 player.setCanJump(true);
                 newVel.y = 0.2f;
             }
         }
 
-        newVel.sub(0, (player.getGravity()/2)* dt, 0);
+        if(!Variables.create)
+        newVel.sub(0, (player.getGravity() / 2) * dt, 0);
 
         player.setVelocity(newVel);
 
@@ -98,7 +107,7 @@ public class PlayerController extends FirstPersonCameraController {
             camera.position.x = 0;
         if (camera.position.y < Variables.blockSize) {
             camera.position.y = Variables.blockSize;
-            if(player.getVelocity().y <= 0){
+            if (player.getVelocity().y <= 0) {
                 player.getVelocity().y = 0;
             }
         }
@@ -117,8 +126,6 @@ public class PlayerController extends FirstPersonCameraController {
 
         super.update();
     }
-
-
 
 
     @Override
@@ -162,18 +169,19 @@ public class PlayerController extends FirstPersonCameraController {
         if (keycode == Input.Keys.NUM_0) {
             selectedBlock = Block.Type.Bedrock;
         }
-        if(keycode == Input.Keys.ALT_RIGHT){
-            if(Variables.create){
-                Vector3 position=getCameraWorldPosition();
-                grid.setBlock((int)position.x,(int)position.y-2,(int)position.z,Block.Type.Diamond);
-                Variables.endX = (int)position.x;
-                Variables.endY = (int)position.y;
-                Variables.endZ = (int)position.z;
-                stopGame( 1);
+        if (keycode == Input.Keys.ALT_RIGHT) {
+            if (Variables.create) {
+                Vector3 position = getCameraWorldPosition();
+                grid.setBlock((int) position.x, (int) position.y - 2, (int) position.z, Block.Type.Diamond);
+                Variables.endX = (int) position.x;
+                Variables.endY = (int) position.y;
+                Variables.endZ = (int) position.z;
+                stopGame(1);
             }
         }
         return false;
     }
+
     public Vector3 getCameraWorldPosition() {
         Vector3 p = camera.position.cpy();
         p.scl(1f / Variables.blockSize);
@@ -181,8 +189,8 @@ public class PlayerController extends FirstPersonCameraController {
         return p;
     }
 
-    void stopGame(int ID){
-        if(ID==1){
+    void stopGame(int ID) {
+        if (ID == 1) {
             worldLoadManager.saveMap(Grid.blocks);
             mapManagment.save();
         }
@@ -190,27 +198,27 @@ public class PlayerController extends FirstPersonCameraController {
         Gdx.app.exit();
     }
 
-    boolean proofJump(Vector3 position){
-        if(grid.hasBlock((int)position.x,(int)position.y-2,(int)position.z)){
+    boolean proofJump(Vector3 position) {
+        if (grid.hasBlock((int) position.x, (int) position.y - 2, (int) position.z)) {
             return true;
-        }else if(grid.hasBlock((int)(position.x),(int)position.y-2,round(position.z))){
-            return  true;
-        }else if(grid.hasBlock(round(position.x),(int)position.y-2,(int)(position.z))){
-            return  true;
-        }else if(grid.hasBlock(round(position.x),(int)position.y-2,round(position.z))){
-            return  true;
+        } else if (grid.hasBlock((int) (position.x), (int) position.y - 2, round(position.z))) {
+            return true;
+        } else if (grid.hasBlock(round(position.x), (int) position.y - 2, (int) (position.z))) {
+            return true;
+        } else if (grid.hasBlock(round(position.x), (int) position.y - 2, round(position.z))) {
+            return true;
         }
         return false;
     }
 
-    int round(float coordinate){
-        float tmp = coordinate%1;
+    int round(float coordinate) {
+        float tmp = coordinate % 1;
         double difference = 0.70;
 
-        if(tmp<=difference){
-            return (int)(coordinate-1);
-        }else if(tmp>=(-difference)){
-            return (int)(coordinate+1);
+        if (tmp <= difference) {
+            return (int) (coordinate - 1);
+        } else if (tmp >= (-difference)) {
+            return (int) (coordinate + 1);
         }
         return (int) coordinate;
     }
