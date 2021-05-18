@@ -51,206 +51,210 @@ public class Player {
         float extension = 0.01f;
 
 
-        Vector3 playerA = new Vector3(player.x - width, player.y - 1.4f, player.z - width);
-        Vector3 playerB = new Vector3(player.x + width, player.y + 0.4f, player.z + width);
-
-
-        BoundingBox playerBoxX = new BoundingBox(
-                new Vector3(Float.MIN_VALUE, playerA.y, playerA.z ),
-                new Vector3(Float.MAX_VALUE, playerB.y, playerB.z)
-        );
-
         float distanceX = Float.MAX_VALUE;
         float distanceY = Float.MAX_VALUE;
         float distanceZ = Float.MAX_VALUE;
 
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
-                for (int k = 0; k < length; k++) {
-                    int x = (int) (player.x - h + i);
-                    int y = (int) (player.y - h + j);
-                    int z = (int) (player.z - h + k);
+
+        Vector3 playerA = new Vector3(player.x - width, player.y - 1.4f, player.z - width);
+        Vector3 playerB = new Vector3(player.x + width, player.y + 0.4f, player.z + width);
+        {
+            BoundingBox playerBoxZ = new BoundingBox(
+                    new Vector3(playerA.x, playerA.y, Float.MIN_VALUE),
+                    new Vector3(playerB.x, playerB.y, Float.MAX_VALUE)
+            );
 
 
-                    Block block = grid.getBlock(x, y, z);
+            List<BoundingBox> blocks = new LinkedList<>();
+            for (int i = 0; i < length; i++) {
+                for (int j = 0; j < length; j++) {
+                    for (int k = 0; k < length; k++) {
+                        int x = (int) (player.x - h + i);
+                        int y = (int) (player.y - h + j);
+                        int z = (int) (player.z - h + k);
 
-                    if (block == null) continue;
-                    Vector3 cubeA = new Vector3(x, y, z);
-                    Vector3 cubeB = new Vector3(x + 1, y + 1, z + 1);
-                    BoundingBox cubeBox = new BoundingBox(cubeA, cubeB);
 
-                    if (cubeBox.intersects(playerBoxX)) {
+                        Block block = grid.getBlock(x, y, z);
 
-                        if (translation.x < 0) {
-                            float edgeBlock = cubeB.x;
-                            float edgePlayer = playerA.x;
+                        if (block == null) continue;
+                        Vector3 cubeA = new Vector3(x, y, z);
+                        Vector3 cubeB = new Vector3(x + 1, y + 1, z + 1);
+                        BoundingBox cubeBox = new BoundingBox(cubeA, cubeB);
+                        blocks.add(cubeBox);
+                        if (cubeBox.intersects(playerBoxZ)) {
+                            if (translation.z < 0) {
+                                float edgeBlock = cubeB.z;
+                                float edgePlayer = playerA.z;
 
-                            if (edgeBlock <= edgePlayer) {
-                                float dis = edgePlayer - edgeBlock;
+                                if (edgeBlock <= edgePlayer) {
+                                    float dis = edgePlayer - edgeBlock;
 
-                                if (dis < distanceX)
-                                    distanceX = dis;
+                                    if (dis < distanceZ)
+                                        distanceZ = dis;
+                                }
+
+                            } else {
+
+                                float edgeBlock = cubeA.z;
+                                float edgePlayer = playerB.z;
+
+
+                                if (edgeBlock >= edgePlayer) {
+                                    float dis = edgeBlock - edgePlayer;
+
+                                    if (dis < distanceZ)
+                                        distanceZ = dis;
+                                }
+
                             }
-
-                        } else {
-
-
-                            float edgeBlock = cubeA.x;
-                            float edgePlayer = playerB.x;
-
-
-                            if (edgeBlock >= edgePlayer) {
-                                float dis = edgeBlock - edgePlayer;
-
-                                if (dis < distanceX)
-                                    distanceX = dis;
-                            }
-
-
                         }
 
                     }
                 }
             }
         }
-
-        if (translation.x >= 0) {
-            if (translation.x > distanceX)
-                translation.x = distanceX;
-        } else {
-            if (translation.x < -distanceX)
-                translation.x = -distanceX;
-        }
-
-        player.x += translation.x;
 
         playerA = new Vector3(player.x - width, player.y - 1.4f, player.z - width);
         playerB = new Vector3(player.x + width, player.y + 0.4f, player.z + width);
-
-        BoundingBox playerBoxY = new BoundingBox(
-                new Vector3(playerA.x , Float.MIN_VALUE, playerA.z ),
-                new Vector3(playerB.x , Float.MAX_VALUE, playerB.z)
-        );
-
-
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
-                for (int k = 0; k < length; k++) {
-                    int x = (int) (player.x - h + i);
-                    int y = (int) (player.y - h + j);
-                    int z = (int) (player.z - h + k);
+        {
+            BoundingBox playerBoxY = new BoundingBox(
+                    new Vector3(playerA.x, Float.MIN_VALUE, playerA.z),
+                    new Vector3(playerB.x, Float.MAX_VALUE, playerB.z)
+            );
 
 
-                    Block block = grid.getBlock(x, y, z);
-
-                    if (block == null) continue;
-                    Vector3 cubeA = new Vector3(x, y, z);
-                    Vector3 cubeB = new Vector3(x + 1, y + 1, z + 1);
-                    BoundingBox cubeBox = new BoundingBox(cubeA, cubeB);
-
-
-                    if (cubeBox.intersects(playerBoxY)) {
-                        if (translation.y < 0) {
-                            float edgeBlock = cubeB.y;
-                            float edgePlayer = playerA.y;
-
-                            if (edgeBlock <= edgePlayer) {
-                                float dis = edgePlayer - edgeBlock;
-
-                                if (dis < distanceY)
-                                    distanceY = dis;
-                            }
-
-                        } else {
-
-                            float edgeBlock = cubeA.y;
-                            float edgePlayer = playerB.y;
+            for (int i = 0; i < length; i++) {
+                for (int j = 0; j < length; j++) {
+                    for (int k = 0; k < length; k++) {
+                        int x = (int) (player.x - h + i);
+                        int y = (int) (player.y - h + j);
+                        int z = (int) (player.z - h + k);
 
 
-                            if (edgeBlock >= edgePlayer) {
-                                float dis = edgeBlock - edgePlayer;
+                        Block block = grid.getBlock(x, y, z);
 
-                                if (dis < distanceY)
-                                    distanceY = dis;
+                        if (block == null) continue;
+                        Vector3 cubeA = new Vector3(x, y, z);
+                        Vector3 cubeB = new Vector3(x + 1, y + 1, z + 1);
+                        BoundingBox cubeBox = new BoundingBox(cubeA, cubeB);
+
+
+                        if (cubeBox.intersects(playerBoxY)) {
+                            if (translation.y < 0) {
+                                float edgeBlock = cubeB.y;
+                                float edgePlayer = playerA.y;
+
+                                if (edgeBlock <= edgePlayer) {
+                                    float dis = edgePlayer - edgeBlock;
+
+                                    if (dis < distanceY)
+                                        distanceY = dis;
+                                }
+
+                            } else {
+
+                                float edgeBlock = cubeA.y;
+                                float edgePlayer = playerB.y;
+
+
+                                if (edgeBlock >= edgePlayer) {
+                                    float dis = edgeBlock - edgePlayer;
+
+                                    if (dis < distanceY)
+                                        distanceY = dis;
+                                }
+
                             }
 
                         }
 
                     }
-
                 }
             }
-        }
-        if (translation.y >= 0) {
-            if (translation.y > distanceY) {
-                velocity.y = distanceY - extension;
-                //velocity.y = 0;
+            if (translation.y >= 0) {
+                if (translation.y > distanceY) {
+                    velocity.y = distanceY - extension;
+                    //velocity.y = 0;
+                }
+            } else {
+                if (translation.y < -distanceY) {
+                    velocity.y = -distanceY + extension;
+                    //velocity.y = 0;
+                    floorDistance = distanceY;
+                    canJump = true;
+                }
             }
-        } else {
-            if (translation.y < -distanceY) {
-                velocity.y = -distanceY + extension;
-                //velocity.y = 0;
-                floorDistance = distanceY;
-                canJump = true;
-            }
-        }
 
-        player.y += translation.y;
+            player.y += translation.y;
+        }
         playerA = new Vector3(player.x - width, player.y - 1.4f, player.z - width);
         playerB = new Vector3(player.x + width, player.y + 0.4f, player.z + width);
-
-        BoundingBox playerBoxZ = new BoundingBox(
-                new Vector3(playerA.x , playerA.y, Float.MIN_VALUE),
-                new Vector3(playerB.x, playerB.y, Float.MAX_VALUE)
-        );
-
-
-        List<BoundingBox> blocks = new LinkedList<>();
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
-                for (int k = 0; k < length; k++) {
-                    int x = (int) (player.x - h + i);
-                    int y = (int) (player.y - h + j);
-                    int z = (int) (player.z - h + k);
+        {
+            BoundingBox playerBoxX = new BoundingBox(
+                    new Vector3(Float.MIN_VALUE, playerA.y, playerA.z),
+                    new Vector3(Float.MAX_VALUE, playerB.y, playerB.z)
+            );
 
 
-                    Block block = grid.getBlock(x, y, z);
-
-                    if (block == null) continue;
-                    Vector3 cubeA = new Vector3(x, y, z);
-                    Vector3 cubeB = new Vector3(x + 1, y + 1, z + 1);
-                    BoundingBox cubeBox = new BoundingBox(cubeA, cubeB);
-                    blocks.add(cubeBox);
-                    if (cubeBox.intersects(playerBoxZ)) {
-                        if (translation.z < 0) {
-                            float edgeBlock = cubeB.z;
-                            float edgePlayer = playerA.z;
-
-                            if (edgeBlock <= edgePlayer) {
-                                float dis = edgePlayer - edgeBlock;
-
-                                if (dis < distanceZ)
-                                    distanceZ = dis;
-                            }
-
-                        } else {
-
-                            float edgeBlock = cubeA.z;
-                            float edgePlayer = playerB.z;
+            for (int i = 0; i < length; i++) {
+                for (int j = 0; j < length; j++) {
+                    for (int k = 0; k < length; k++) {
+                        int x = (int) (player.x - h + i);
+                        int y = (int) (player.y - h + j);
+                        int z = (int) (player.z - h + k);
 
 
-                            if (edgeBlock >= edgePlayer) {
-                                float dis = edgeBlock - edgePlayer;
+                        Block block = grid.getBlock(x, y, z);
 
-                                if (dis < distanceZ)
-                                    distanceZ = dis;
+                        if (block == null) continue;
+                        Vector3 cubeA = new Vector3(x, y, z);
+                        Vector3 cubeB = new Vector3(x + 1, y + 1, z + 1);
+                        BoundingBox cubeBox = new BoundingBox(cubeA, cubeB);
+
+                        if (cubeBox.intersects(playerBoxX)) {
+
+                            if (translation.x < 0) {
+                                float edgeBlock = cubeB.x;
+                                float edgePlayer = playerA.x;
+
+                                if (edgeBlock <= edgePlayer) {
+                                    float dis = edgePlayer - edgeBlock;
+
+                                    if (dis < distanceX)
+                                        distanceX = dis;
+                                }
+
+                            } else {
+
+
+                                float edgeBlock = cubeA.x;
+                                float edgePlayer = playerB.x;
+
+
+                                if (edgeBlock >= edgePlayer) {
+                                    float dis = edgeBlock - edgePlayer;
+
+                                    if (dis < distanceX)
+                                        distanceX = dis;
+                                }
+
+
                             }
 
                         }
                     }
-
                 }
             }
+
+            if (translation.x >= 0) {
+                if (translation.x > distanceX)
+                    translation.x = distanceX;
+            } else {
+                if (translation.x < -distanceX)
+                    translation.x = -distanceX;
+            }
+
+            player.x += translation.x;
         }
 
         if (translation.z >= 0) {
