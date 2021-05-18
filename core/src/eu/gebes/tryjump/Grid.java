@@ -25,7 +25,7 @@ public class Grid implements Disposable {
         if(!Variables.create){
             blocks = worldLoadManager.loadMap();
         }else{
-            blocks = new Block[250][50][51];
+            blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
             blocks[0][15][26]=blockManager.getBlockFor(Block.Type.Diamond);
         }
         updatePosition();

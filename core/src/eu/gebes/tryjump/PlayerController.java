@@ -94,7 +94,7 @@ public class PlayerController extends FirstPersonCameraController {
         }
 
         if(!Variables.create)
-        newVel.sub(0, (player.getGravity() / 2) * dt, 0);
+        newVel.sub(0, 9.8f * 0.5f  * dt, 0);
 
         player.setVelocity(newVel);
 

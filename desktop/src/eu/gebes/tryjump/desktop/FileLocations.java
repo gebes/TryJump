@@ -12,7 +12,7 @@ public class FileLocations {
         if (System.getProperty("os.name").toLowerCase().contains("windows")) {
             GAME_HOME_FOLDER = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\.tryjump\\");
         } else {
-            GAME_HOME_FOLDER = new File("~/Documents/TryJump/");
+            GAME_HOME_FOLDER = new File(System.getProperty("user.home")  + "/TryJump/");
         }
         MAPS_FILE = new File(GAME_HOME_FOLDER + "\\maps.txt");
         SETTINGS_FILE = new File(GAME_HOME_FOLDER + "\\settings.txt");
