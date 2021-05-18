@@ -78,14 +78,14 @@ public class PlayerController extends FirstPersonCameraController {
                 newVel.y = 0.1f;
             } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
                 newVel.y = -0.1f;
-            }else{
+            } else {
                 newVel.y = 0;
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.SPACE) & player.isCanJump() && player.getFloorDistance() < 0.5) {
             if (!(Variables.create)) {
                 if (proofJump(getCameraWorldPosition())) {
                     player.setCanJump(false);
-                    newVel.y = 1.14f;
+                    newVel.y = 0.98f;
                 }
             } else {
                 player.setCanJump(true);
@@ -93,15 +93,12 @@ public class PlayerController extends FirstPersonCameraController {
             }
         }
 
-        if(!Variables.create)
-        newVel.sub(0, 9.8f * 0.5f  * dt, 0);
+        if (!Variables.create)
+            newVel.sub(0, 9.8f * 0.5f * dt, 0);
 
         player.setVelocity(newVel);
 
-        Vector3 t = player.moveBy(player.getVelocity(), getCameraWorldPosition());
-        camera.position.add(
-                t
-        );
+        camera.position.add(player.moveBy(player.getVelocity(),  getCameraWorldPosition()));
 
         if (camera.position.x < 0)
             camera.position.x = 0;
