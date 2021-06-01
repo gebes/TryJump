@@ -1,12 +1,11 @@
 package eu.gebes.tryjump.desktop.map;
 
-import eu.gebes.tryjump.desktop.FileLocations;
+import eu.gebes.tryjump.utils.FileLocations;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 
 import javax.annotation.PostConstruct;
-import javax.swing.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -41,7 +40,7 @@ public class MapManagment {
             in.close();
         } catch (FileNotFoundException e) {
             new File(FileLocations.GAME_HOME_FOLDER.getAbsolutePath() + "/maps").mkdirs();
-            List<String> lines = Arrays.asList("Jump1:10000", "Jump2:10000", "Jump3:10000");
+            List<String> lines = Arrays.asList("Start:10000");
             Files.write(Paths.get(String.valueOf(FileLocations.MAPS_FILE)),
                     lines
                     , StandardCharsets.UTF_8,

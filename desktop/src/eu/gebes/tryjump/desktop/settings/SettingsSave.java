@@ -1,6 +1,6 @@
 package eu.gebes.tryjump.desktop.settings;
 
-import eu.gebes.tryjump.desktop.FileLocations;
+import eu.gebes.tryjump.utils.FileLocations;
 import lombok.AccessLevel;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;

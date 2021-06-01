@@ -4,12 +4,17 @@ import com.badlogic.gdx.math.Vector3;
 import eu.gebes.tryjump.Variables;
 import eu.gebes.tryjump.blocks.Block;
 import eu.gebes.tryjump.blocks.BlockManager;
+import eu.gebes.tryjump.utils.FileLocations;
 
 import java.io.*;
 
 public class WorldLoadManager {
     private final BlockManager blockManager = new BlockManager();
-    private final File FILE_NAME = new File(System.getProperty("user.home") + "\\AppData\\Roaming\\.tryjump\\maps\\"+Variables.mapName+".map");
+    private final File FILE_NAME;
+
+    {
+        FILE_NAME = new File(FileLocations.GAME_HOME_FOLDER.getAbsolutePath() + "/maps/" + Variables.mapName + ".map");
+    }
 
 
     public void saveMap(Block[][][] blocks) {
@@ -17,7 +22,7 @@ public class WorldLoadManager {
         StringBuilder out = new StringBuilder();
         Block startBlock = null;
         int currentCount = 0;
-        out.append(Variables.endX+"/"+Variables.endY+"/"+Variables.endZ+"I");
+        out.append(Variables.endX + "/" + Variables.endY + "/" + Variables.endZ + "I");
 
         for (int y = 0; y < Variables.gridHeight; y++) {
             for (int z = 0; z < Variables.gridDepth; z++) {
@@ -57,31 +62,36 @@ public class WorldLoadManager {
 
         try {
             BufferedReader in;
-            if(Variables.mapName.equals("Jump1")||Variables.mapName.equals("Jump2")||Variables.mapName.equals("Jump3")){
-                InputStream file = getClass().getResourceAsStream("/maps/"+Variables.mapName+".map");
+            if (Variables.mapName.equals("Start")) {
+                InputStream file = getClass().getResourceAsStream("/maps/" + Variables.mapName + ".map");
                 in = new BufferedReader(new InputStreamReader(file));
-            }else {
+            } else {
                 in = new BufferedReader(new FileReader(FILE_NAME));
             }
             String[] tmp = in.readLine().split("I");
             String[] endCoord = tmp[0].split("/");
-            Variables.endX= Integer.parseInt(endCoord[0]);
-            Variables.endY= Integer.parseInt(endCoord[1]);
-            Variables.endZ= Integer.parseInt(endCoord[2]);
+            Variables.endX = Integer.parseInt(endCoord[0]);
+            Variables.endY = Integer.parseInt(endCoord[1]);
+            Variables.endZ = Integer.parseInt(endCoord[2]);
             input = tmp[1].split(" ");
 
 
-            for(int i=0;i< input.length;i++){
+            for (int i = 0; i < input.length; i++) {
                 String[] oneBlock = input[i].split("/");
-                int x=Integer.parseInt(oneBlock[0]),y=Integer.parseInt(oneBlock[1]),z=Integer.parseInt(oneBlock[2]);
+                int x = Integer.parseInt(oneBlock[0]), y = Integer.parseInt(oneBlock[1]), z = Integer.parseInt(oneBlock[2]);
 
                 Block.Type block = Block.Type.fromId(Integer.parseInt(oneBlock[4]));
 
-                for(int j =0; j<Integer.parseInt(oneBlock[3]);j++){
+                for (int j = 0; j < Integer.parseInt(oneBlock[3]); j++) {
                     blocks[x][y][z] = blockManager.getBlockFor(block);
                     x++;
-                    if(x==Variables.gridWidth){ x=0;z++;
-                        if(z==Variables.gridHeight){ y++;y=0;}
+                    if (x == Variables.gridWidth) {
+                        x = 0;
+                        z++;
+                        if (z == Variables.gridHeight) {
+                            y++;
+                            y = 0;
+                        }
                     }
                 }
             }
@@ -93,13 +103,14 @@ public class WorldLoadManager {
 
     private void saveToFile(String map) {
         try {
-            BufferedWriter outputWriter= new BufferedWriter(new FileWriter(FILE_NAME));
+            BufferedWriter outputWriter = new BufferedWriter(new FileWriter(FILE_NAME));
 
             outputWriter.write(map);
 
             outputWriter.flush();
             outputWriter.close();
         } catch (FileNotFoundException e) {
+            FileLocations.GAME_HOME_FOLDER.mkdir();
             try {
                 FILE_NAME.createNewFile();
             } catch (IOException ioException) {

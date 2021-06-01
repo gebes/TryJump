@@ -1,18 +1,10 @@
 package eu.gebes.tryjump.desktop.map;
 
 import eu.gebes.tryjump.Variables;
-import eu.gebes.tryjump.desktop.GUI;
-import eu.gebes.tryjump.desktop.game.StartApplication;
-import eu.gebes.tryjump.desktop.settings.SettingsPane;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
 @FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
@@ -35,7 +27,7 @@ public class MapPane {
         scrollPane.setPreferredSize(new Dimension(300,150));
 
         mapSelector.add(scrollPane);
-        mapSelector.add(mapNodes.button());
+        mapSelector.add(mapNodes.buttonCreate());
         return mapSelector;
     }
 

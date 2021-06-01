@@ -34,7 +34,7 @@ public class MapNodes {
             listModel.add(i,tmp);
         }
         final JList mapList = new JList(listModel);
-        mapList.setFont(new java.awt.Font("Tahoma", 1, 28));
+        mapList.setFont(new java.awt.Font("Tahoma", Font.BOLD, 28));
 
 
         mapList.setLayoutOrientation(JList.VERTICAL);
@@ -54,7 +54,7 @@ public class MapNodes {
         return mapList;
     }
 
-    public JButton button(){
+    public JButton buttonCreate(){
         JButton button = new JButton("CREATE");
         button.setSize(300,100);
         button.setPreferredSize(new Dimension(300, 70));
@@ -62,7 +62,7 @@ public class MapNodes {
         button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent e) {
                 nameDialog();
-                Variables.create= true;
+                Variables.levelEditorModeEnabled = true;
                 Variables.mapName = createName;
                 startApplication.startGame(settingsPaneClass.getWidth(), settingsPaneClass.getHeight(), settingsPaneClass.getFov(), settingsPaneClass.isFullscreenBool(), settingsPaneClass.getVolume());
                 GUI.getFrame().dispose();
@@ -70,6 +70,7 @@ public class MapNodes {
         });
         return button;
     }
+
 
     private void nameDialog(){
         final JDialog dialog = new JDialog();

@@ -1,32 +1,30 @@
 package eu.gebes.tryjump.map;
 
 import eu.gebes.tryjump.Variables;
+import eu.gebes.tryjump.utils.FileLocations;
 
 import java.io.*;
 
 
 public class MapManagment {
-    private String[] maps = Variables.maps;
-    private final String home = System.getProperty("user.home");
-    private final File FILE_DIRECTORY = new File( home + "\\AppData\\Roaming\\.tryjump\\");
-    private final File FILE_NAME = new File(FILE_DIRECTORY + "\\maps.txt");
+    private final String[] maps = Variables.maps;
 
-    public  synchronized void save() {
+    public void save() {
         try {
             BufferedWriter outputWriter = null;
-            outputWriter = new BufferedWriter(new FileWriter(FILE_NAME));
-            for(int i=0;i<maps.length;i++){
-                if(maps[i].contains(Variables.mapName)){
+            outputWriter = new BufferedWriter(new FileWriter(FileLocations.MAPS_FILE));
+            for (int i = 0; i < maps.length; i++) {
+                if (maps[i].contains(Variables.mapName)) {
                     String[] tmp = maps[i].split(":");
-                    if(Integer.parseInt(tmp[1])>Variables.time){
-                        maps[i]=Variables.mapName+":"+Variables.time;
+                    if (Integer.parseInt(tmp[1]) > Variables.time) {
+                        maps[i] = Variables.mapName + ":" + Variables.time;
                     }
                 }
                 outputWriter.write(maps[i]);
                 outputWriter.newLine();
             }
-            if(Variables.create){
-                outputWriter.write(Variables.mapName+":"+"10000");
+            if (Variables.levelEditorModeEnabled) {
+                outputWriter.write(Variables.mapName + ":" + "10000");
                 outputWriter.newLine();
             }
 

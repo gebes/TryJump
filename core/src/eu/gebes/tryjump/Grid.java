@@ -6,10 +6,12 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import eu.gebes.tryjump.blocks.Block;
 import eu.gebes.tryjump.blocks.BlockManager;
+import eu.gebes.tryjump.entities.Player;
 import eu.gebes.tryjump.map.WorldLoadManager;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
+
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Data
@@ -20,13 +22,13 @@ public class Grid implements Disposable {
 
     public static Block[][][] blocks;
 
-    public Grid() {
-        blockManager = new BlockManager();
-        if(!Variables.create){
+    public Grid(BlockManager blockManager) {
+        this.blockManager = blockManager;
+        if (!Variables.levelEditorModeEnabled) {
             blocks = worldLoadManager.loadMap();
-        }else{
+        } else {
             blocks = new Block[Variables.gridWidth][Variables.gridHeight][Variables.gridDepth];
-            blocks[0][15][26]=blockManager.getBlockFor(Block.Type.Diamond);
+            fillBlock(Variables.gridWidth/2-1, 5, Variables.gridDepth/2-1,Variables.gridWidth/2+1, 5, Variables.gridDepth/2+1, Block.Type.Diamond);
         }
         updatePosition();
     }
@@ -47,16 +49,26 @@ public class Grid implements Disposable {
 
     }
 
-    public void renderGrid(ModelBatch batch, Environment environment, PlayerController cameraController) {
+    public void render(ModelBatch batch, Environment environment, Player player) {
         for (int x = 0; x < blocks.length; x++) {
             for (int y = 0; y < blocks[x].length; y++) {
                 for (int z = 0; z < blocks[x][y].length; z++) {
-                    if (hasBlock(x, y, z) && isVisible(x, y, z) && cameraController.getCameraWorldPosition().dst2(getBlock(x, y, z).getPosition().scl(1f / Variables.blockSize)) < (100 * 100))
+                    if (hasBlock(x, y, z) && isVisible(x, y, z) && player.getWorldPosition().dst2(getBlock(x, y, z).getPosition().scl(1f / Variables.blockSize)) < (100 * 100))
                         batch.render(blocks[x][y][z].getInstance(), environment);
                 }
             }
         }
+    }
 
+    public void renderShadow(ModelBatch batch, Environment environment, Player player) {
+        for (int x = 0; x < blocks.length; x++) {
+            for (int y = 0; y < blocks[x].length; y++) {
+                for (int z = 0; z < blocks[x][y].length; z++) {
+                    if (hasBlock(x, y, z) && isVisible(x, y, z) && player.getWorldPosition().dst2(getBlock(x, y, z).getPosition().scl(1f / Variables.blockSize)) < (100 * 100))
+                        batch.render(blocks[x][y][z].getInstance(), environment);
+                }
+            }
+        }
     }
 
     public boolean hasBlock(int x, int y, int z) {
@@ -68,6 +80,17 @@ public class Grid implements Disposable {
         updatePosition();
     }
 
+    public void fillBlock(int x1, int y1, int z1, int x2, int y2, int z2, Block.Type block) {
+        for (int x = x1; x <= x2; x++) {
+            for (int y = y1; y <= y2; y++) {
+                for (int z = z1; z <= z2; z++) {
+                    blocks[x][y][z] = blockManager.getBlockFor(block);
+                }
+            }
+        }
+        updatePosition();
+    }
+
     public boolean isVisible(int x, int y, int z) {
         return !isHidden(x, y, z);
     }
@@ -75,11 +98,11 @@ public class Grid implements Disposable {
 
     public boolean isHidden(int x, int y, int z) {
         return getBlock(x + 1, y, z) != null &&
-               getBlock(x - 1, y, z) != null &&
-               getBlock(x, y + 1, z) != null &&
-               getBlock(x, y - 1, z) != null &&
-               getBlock(x, y, z + 1) != null &&
-               getBlock(x, y, z - 1) != null;
+                getBlock(x - 1, y, z) != null &&
+                getBlock(x, y + 1, z) != null &&
+                getBlock(x, y - 1, z) != null &&
+                getBlock(x, y, z + 1) != null &&
+                getBlock(x, y, z - 1) != null;
     }
 
     public Block getBlock(int x, int y, int z) {
@@ -108,12 +131,13 @@ public class Grid implements Disposable {
         int lastPointY = 0;
         int lastPointZ = 0;
 
-        for (int i = 1; i < Variables.blockSize * 10; i++) {
+        for (float i = 1; i < Variables.blockSize * 50; i += 0.2f) {
             Vector3 tmpStart = new Vector3(startPoint);
             Vector3 tmpDirection = new Vector3(direction);
             tmpDirection.nor();
             tmpDirection.scl(i);
             Vector3 line = tmpStart.add(tmpDirection);
+
             // scale to grid world
             line.scl(1f / Variables.blockSize);
             int x = Math.round(line.x);
@@ -131,7 +155,7 @@ public class Grid implements Disposable {
                         blocks[x][y][z] = null;
                         updatePosition();
                     }
-                } else if (type == type) {
+                } else {
                     blocks[lastPointX][lastPointY][lastPointZ] = blockManager.getBlockFor(type);
                     updatePosition();
                 }
@@ -144,5 +168,8 @@ public class Grid implements Disposable {
         }
     }
 
+    public void save(){
+        getWorldLoadManager().saveMap(blocks);
+    }
 
 }
