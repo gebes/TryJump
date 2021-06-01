@@ -1,6 +1,7 @@
 # Bugs
 
 ## 1) (FIXED) Y==5
-The player gets randomly stuck in blocks
+(fixed) The player gets randomly stuck in blocks
 
-Fixed by removing the virtual extension for the player
+Camera goes crazy when looking to floor
+smoother movement
